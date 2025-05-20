@@ -1,0 +1,44 @@
+<p>If you have data source rows that you wish to make continuously available to the app, the best way is to make use of
+    Sync’s Hosted GET support.</p>
+<p>You need to create your desired data source tables in the <strong>SyncData</strong> database, naming the tables by
+    the External Id you have assigned to the matching Data Source in our platform. Once set up, the app will directly
+    request rows from the <strong>SyncData</strong> database table, bypassing the need to have rows on our platform
+    altogether.</p>
+<p>Within the Sync application, a data source REST API is exposed with a single on GET function which accepts a data
+    source request and generates a response containing the specified SyncData database tables, where external id is the
+    table name. This API is accessible on the configured https://{IP Address/Domain Name}/api/v2/datasources.</p>
+<p>In order to take advantage of this, add a Hosted GET connector within the Platform for each data source as follows:
+</p>
+<ol start="1">
+    <li>
+        <p>Login to the Platform</p>
+    </li>
+    <li>
+        <p>Navigate to Connected Data -&gt; Data Sources and click the settings link on the target data source.</p>
+    </li>
+    <li>
+        <p>Ensure that you have set the External Id field with a value – this MUST match the name of the table you’ve
+            created in the SyncData database.</p>
+    </li>
+    <li>
+        <p>Mouse over Add Connector and select Hosted GET</p>
+    </li>
+    <li>
+        <p>Enter the connector details as per the screenshot below (enter your own Sync installation’s data sources
+            target URL) and click Save.</p>
+    </li>
+</ol>
+<p>If you are setting up many data sources with Hosted GET connectors, then you may want to set the Global Hosted GET
+    URL found in the Menu -&gt; Organisation Setup page. Set this to be the Sync API endpoint and then on all Hosted GET
+    connectors, instead of filling in the “Target GET URL” rather just to the “Use Global Hosted GET URL” option.</p>
+<p><strong>IMPORTANT NOTES</strong></p>
+<ul>
+    <li>
+        <p>Each platform Data Source External Id <strong>must</strong> <strong>match</strong> that of the SyncData
+            table’s name.</p>
+    </li>
+    <li>
+        <p>Columns in the data source must follow the <strong>same order</strong> as the columns in the related table.
+        </p>
+    </li>
+</ul>

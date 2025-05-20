@@ -1,0 +1,99 @@
+<p>Below is a simple JSON example of how you can pre-populate a Form entry via a POST request to our Tasks API.  </p><p>Note how we just repeat the same set of Table fields (&quot;worker&quot;, &quot;labour&quot;, &quot;exist_class&quot;) in the JSON - this populates as separate rows into the Table on the Form entry.<br/>The same technique will work with a set of fields found in a repeatable Page.</p><p>NOTE: For more complex cases - e.g. where you have a Table within a repeatable Page, or a Table within a Table, you must use our hierarchical format option to pre-fill the Form entry fields instead.</p><div class="code panel pdl conf-macro output-block" style="border-width: 1px;" data-hasbody="true" data-macro-name="code" data-macro-id="a2c92370-a027-4d5c-bbe3-9fa2b33c3e5b"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+
+  &quot;UserEmail&quot;: &quot; user@example.com&quot;,
+
+  &quot;Name&quot;: &quot;MORNING timesheet for PROJECT-001&quot;,
+
+  &quot;Icon&quot;: &quot;Clock&quot;,
+
+  &quot;CompleteBy&quot;: &quot;2019-03-15T00:00:00.0000000Z&quot;,
+
+  &quot;StartBy&quot;: &quot;2019-03-14T18:00:00.0000000Z&quot;,
+
+  &quot;Activities&quot;: [
+
+    {
+
+        &quot;ActivityType&quot;: &quot;FillOutForm&quot;,
+
+        &quot;FormExternalId&quot;: &quot;TIMESHEET&quot;,
+
+        &quot;FormAnswers&quot;: [
+
+          {
+
+            &quot;Name&quot;: &quot;work_date&quot;,
+
+            &quot;Value&quot;: &quot;2019-03-14&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;project_num&quot;,
+
+            &quot;Value&quot;: &quot;PROJECT-001&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;worker&quot;,
+
+            &quot;Value&quot;: &quot;Ben Doe - 54321&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;exist_class&quot;,
+
+            &quot;Value&quot;: &quot;Scaffolders - Advanced Level 2&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;labour&quot;,
+
+            &quot;Value&quot;: &quot;12.00&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;worker&quot;,
+
+            &quot;Value&quot;: &quot;John Smith - 12345&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;exist_class&quot;,
+
+            &quot;Value&quot;: &quot;Scaffolders - Basic Level 1&quot;
+
+          },
+
+          {
+
+            &quot;Name&quot;: &quot;labour&quot;,
+
+            &quot;Value&quot;: &quot;12.00&quot;
+
+          }
+
+        ]
+
+    }
+
+  ],
+
+  &quot;CompanyId&quot;: XXXXX,
+
+  &quot;IntegrationKey&quot;: &quot;XXXXXXX&quot;
+
+}</pre>
+</div></div>

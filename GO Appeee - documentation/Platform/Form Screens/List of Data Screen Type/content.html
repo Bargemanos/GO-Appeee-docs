@@ -1,0 +1,136 @@
+<p>The List of Data Screen Type is one of our data perusal screens. This screen type is data driven and enables you to
+    visualise the rows in a data source.</p>
+
+<img class="image-left" width="226" src="..\..\..\..\assets\Form Screens\List of Data Screen Type\image-20221013-150307.png" alt="List of Data Screen Type">
+  
+<p>To add a listing screen, navigate to <strong>Apps</strong> -> <strong>Screens</strong></p>
+
+<p>Click on the <strong>+ADD NEW</strong> button on the right hand side of the page</p>
+
+
+
+<img class="image-left" width="566" src="..\..\..\..\assets\Form Screens\List of Data Screen Type\image-20221013-150350.png" alt="Create new screen">
+    <li>
+        <p>Name your Listing Screen</p>
+    </li>
+    <li>
+        <p>Select a suitable icon</p>
+    </li>
+    <li>
+        <p>Select your data source</p>
+    </li>
+    <li>
+        <p>Click on the <strong>+CREATE</strong> button</p>
+    </li>
+</ol>
+
+<img class="image-left" width="566" src="..\..\..\..\assets\Form Screens\List of Data Screen Type\image-20221013-150400.png" alt="Screen configuration">
+
+<h3 id="ListofDataScreenType-ConfiguringtheTitlebar"><strong>Configuring the Title bar</strong></h3>
+<ol>
+    <li>
+        <p>Screen Title - This will be populated with the name of your screen.</p>
+    </li>
+    <li>
+        <p>Action Buttons - Define buttons to appear on the title bar.
+            <ul>
+                <li>
+                    <p>Select which button you'd like to configure, LEFT, RIGHT1 or RIGHT2</p>
+                </li>
+                <li>
+                    <p>Select an icon</p>
+                </li>
+                <li>
+                    <p>Add the button text</p>
+                </li>
+                <li>
+                    <p>Select the button colors</p>
+                </li>
+                <li>
+                    <p>Select the user interaction</p>
+                </li>
+            </ul>
+        </p>
+    </li>
+    <li>
+        <p>Button Visibility - Control the visibility of this button using a formula</p>
+    </li>
+    <li>
+        <p>Disable Conditional Styles - Whether or not conditional (i.e. column value specific) styles defined on the
+            Data Source will override the styles defined in this design</p>
+    </li>
+</ol>
+
+<h3 id="ListofDataScreenType-ConfigureFiltering"><strong>Configure Filtering</strong></h3>
+<p>Click on the Filter Bar on the top of the screen designer</p>
+
+<img class="image-left" width="453" src="..\..\..\..\assets\Form Screens\List of Data Screen Type\image-20221013-150426.png" alt="Filter bar">
+
+<h3 id="ListofDataScreenType-BasicProperties"><strong>Basic Properties</strong></h3>
+<ul>
+    <li>
+        <p>Show Search Box - Whether or not to show a Search box</p>
+    </li>
+    <li>
+        <p>Allow users to filter by column - Enables user to specify their own custom filters for the rows being
+            displayed.</p>
+    </li>
+    <li>
+        <p>User Filters override default - By default, any user filters are applied on top of the Default Filter. If
+            this option is selected, the Default Filter is ignored when user filters are specified.</p>
+    </li>
+</ul>
+
+<h3 id="ListofDataScreenType-Validation&amp;Behavior"><strong>Validation &amp; Behavior</strong></h3>
+<ul>
+    <li>
+        <p>Search Pattern - By default, searching will filter rows based on the user's search text matching anywhere
+            within the displayable row values.<br />This option allows you to specify a replacement regular expression
+            for row matching.</p>
+        <p>Use {{this}} to refer to the user search text in your regular expression.<br />e.g. '^{{this}}' will show
+            rows that start with the search text.</p>
+    </li>
+    <li>
+        <p>Default Filter - Allows you to specify the default filter formula for this screen. Any incoming filters will
+            override any default filter specified.<br />e.g. {{this[0]}} = ORGMETA('projectId')</p>
+    </li>
+</ul>
+
+<h3 id="ListofDataScreenType-Layout&amp;Styling"><strong>Layout &amp; Styling</strong></h3>
+<ul>
+    <li>
+        <p>Order by Column - Orders Data by a column from the Data Source. If left blank, then ordering is by the first
+            displayable position - e.g. Title.</p>
+    </li>
+    <li>
+        <p>Group By Column - Groups Data by a column from the Data Source.</p>
+    </li>
+    <li>
+        <p>Background - The default background color of group headers</p>
+    </li>
+    <li>
+        <p>Group By Conditional Style - Whether or not conditional (i.e. column value specific) styles should be applied
+            to the background color or foreground text.<br />Conditional styles can be defined on the Rows page of the
+            Data Source.</p>
+    </li>
+    <li>
+        <p>Sort Priority - Determines the priority/order in which to apply Grouping or Ordering</p>
+    </li>
+</ul>
+
+<h3 id="ListofDataScreenType-Configurearow"><strong>Configure a row</strong></h3>
+<p>Click on a row in the screen designer</p>
+
+<img class="image-left" width="453" src="..\..\..\..\assets\Form Screens\List of Data Screen Type\image-20221013-150453.png" alt="Row configuration">
+
+<p>Configure the 4 items that are displayed on the screen, Title Left, Title Right, Subtitle Left Subtitle Right
+    by making a choice from the dropdown which corresponds to the column in the data source.</p>
+
+<p><strong>Thumbnail</strong> - Link the thumbnail of each row to a Data Source column</p>
+<p><strong>User Interaction</strong> - Define a user interaction for each row</p>
+
+<h3 id="ListofDataScreenType-Layout&amp;Styling.1"><strong>Layout &amp; Styling</strong></h3>
+<p><strong>Default Background</strong> - The default background color of all rows</p>
+<p><strong>Conditional Background</strong> - Determine the background color of each row according to the conditional
+    styles on the given column.<br />Conditional styles can be defined in the Rows page of the Data Source</p>
+<p />

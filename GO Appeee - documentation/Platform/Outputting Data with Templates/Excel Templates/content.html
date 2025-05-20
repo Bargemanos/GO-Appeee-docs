@@ -1,0 +1,150 @@
+<p>Our platform allows you to export Data in the layouts you want by using Microsoft Excel templates. If you already
+    have Excel documents that you have been printing out to use as data capture Forms, this means that with a few minor
+    changes you can reuse these as data templates.</p>
+<p>This functionality works similarly to a Microsoft Word "mail merge" in that the system produces output based upon
+    pre-formatted templates. The template contains the static (non-changing) text, images and formatting that you want
+    to appear in the final output. It also includes <strong>placeholders</strong> for injecting where you want Form
+    entry answers to go. </p>
+<p>For example, imagine you have an Inspection Form and you want to export the Inspection Data captured on the app as a
+    standard letter. You could create a template that sets out the standard text of the letter along with placeholders
+    for where various Inspection answers should go. </p>
+<p><em>Want to jump straight into the deep end? Take a look at our "kitchen sink" template file attached at the bottom
+        of this article.</em></p>
+<h2 id="ExcelTemplates-AddingaTemplatetoaForm"><strong>Adding a Template to a Form</strong></h2>
+<ol>
+    <li>
+        <p>First identify the Form that you wish to create a template for.<br />If you don't already have a Form, you
+            can quickly create the Form using the Form Screen designer.<br /></p>
+    </li>
+    <li>
+        <p>Next you'll need a new or existing Word or Excel file. <br />If you already have Word/Excel files that you
+            have been printing to use as data capture Forms, these can easily be reused as a template.<br /></p>
+    </li>
+    <li>
+        <p>Go through your template and insert <em><strong>placeholders</strong></em> wherever you want the system to
+            inject answers from data entries of your chosen Form.<br />Placeholders are entered using the unique data
+            name of the Form field, wrapped in curly braces – e.g. <strong>{{dataname}}</strong></p>
+        <p>So for example if your Form has a field with data name of "LastName", then you can instruct the system to
+            inject the answer for this field wherever the placeholder {{LastName}} appears.</p>
+        <p>Any formatting (font, color, highlighting, size etc) that you apply to the placeholder will be honoured by
+            the system and applied to the answer value inserted.<br /><strong>Important Note:</strong><br /><strong>You
+                may only have ONE placeholder or formula per cell. Any other text in the cell will be
+                discarded!</strong><br /></p>
+    </li>
+    <li>
+        <p>Once you have inserted all the placeholders needed, upload the template file to your Form screen.<br />There
+            are two places where you can add a template to a Form:</p>
+        <ol>
+            <li>
+                <p>Form Level</p>
+                <p>If you add a template at this level, you are instructing the system to use this template as the
+                    default whenever a PDF is generated.</p>
+                <p>Upload your template using the "Excel Template" field found in your Form's Settings page.</p>
+            </li>
+            <li>
+                <p>Connector Level</p>
+            </li>
+            <li>
+                <p>This is a template that is specific to one or more Connectors, but should not be used as a
+                    default.<br />Upload your template using the "add data template" link found on appropriate
+                    Connectors in your Form's Connectors page.</p>
+            </li>
+        </ol>
+    </li>
+</ol>
+<p>NOTE: Uploading a template also makes new export options available on the Data area.</p>
+<h2 id="ExcelTemplates-MultipleSheets"><strong>Multiple Sheets</strong></h2>
+<p>The template engine supports multiples sheets in one Excel document. When outputting to a PDF, each sheet will start
+    on a new page.</p>
+<h2 id="ExcelTemplates-TestingYourTemplates"><strong>Testing Your Templates</strong></h2>
+<p>Assuming you have at least one existing Form entry for your Form, you can test your templates fairly easily by using
+    the Data area.</p>
+<p>In the Data page, search entries against your Form and the version onto which you uploaded your template. Once you
+    have some Data results, hover over a row and click the Export option to get an instant look at your template output
+    :)</p>
+<h2 id="ExcelTemplates-TipsandTricksForGreatPDFOutput"><strong>Tips and Tricks For Great PDF Output</strong></h2>
+<ul>
+    <li>
+        <p>We strongly suggest that you do not use textboxes or other floating field types. These are not well supported
+            by our template generation software.<br />If you must use these, then ensure "Object Positioning" is set to
+            be "Move but don't size with cells" (this option is found in the Properties tab when you right click and go
+            Format Picture on your floating image).<br /></p>
+    </li>
+    <li>
+        <p>Similarly we strongly recommend you avoid using Excel conditional display formatting in your
+            templates.<br />This is not officially supported by our template generation engine, and its quite possible
+            that your templates may break in the future even if they work today.<br />If your templates do break or stop
+            applying conditional formatting, this will not be supported or considered a defect by us.<br />You have been
+            warned!<br /></p>
+    </li>
+    <li>
+        <p>You must put each individual page underneath each other.<br />Do not place pages horizontally side by
+            side.<br />This is because our Excel to PDF generator always exports using the "Fit All Columns on One Page"
+            option found in the Print settings of Excel.<br /></p>
+    </li>
+    <li>
+        <p>To get a fair idea of how your Excel template will export to PDF, turn on the following settings in Excel
+            when creating a template: </p>
+        <ul>
+            <li>
+                <p>Set your Print setting to "Fit All Columns on One Page"</p>
+            </li>
+            <li>
+                <p>Under the View option in the ribbon, make sure Page Break Preview is turned on.<br /></p>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p>This way you will see exactly what space you have to work with, where expected page breaks are, and also how
+            the pages will be scaled (if necessary). </p>
+        <p />
+    </li>
+    <li>
+        <p>Manually inserting Page Breaks is a good way to control the page output of your template.<br /></p>
+    </li>
+    <li>
+        <p>Getting blank (or almost blank) pages?<br />Despite adding your own Page Breaks, sometimes you may find
+            individual pages are overflowing into another page (giving almost blank pages) when output as PDF. This is
+            because our PDF generation <strong>does not scale exactly the same as Excel does</strong>.</p>
+        <p>The slight difference in scaling often means that pages are rendered slightly taller by our PDF component
+            when compared to Excel. As a result, the offending pages will run slightly over the space available on an A4
+            page in the PDF, resulting in the overflow being written to a new page.</p>
+        <p>One way to fix this is to count the rows in the pages that are not overflowing, and then adjusting your
+            offending pages to have the same or less rows. This assumes your rows are roughly equal in height.</p>
+        <p>Another option is adjust the offending pages, making them shorter in height and moving up your manual Page
+            Breaks.<br /></p>
+    </li>
+    <li>
+        <p>Automatic Page Breaks are also supported - you can get an idea of the PDF output in Excel by applying the
+            following settings:<br />In the Page Layout tab of your worksheet:</p>
+        <ul>
+            <li>
+                <p>Ensure the Height setting is"Automatic" in the Scale to Fit area.</p>
+            </li>
+            <li>
+                <p>To be sure you have no manual breaks, you can go to Breaks -> "Reset all page breaks".</p>
+            </li>
+        </ul>
+    </li>
+</ul>
+<p><strong>"Kitchen Sink" Example Template</strong></p>
+<p>If you're the kind of person that likes to jump straight into the deep end, then take a look at the attached xlsx
+    file below :)</p>
+<p>This is a "kitchen sink" example of most of our functionality for Excel data templates.</p>
+<p><strong>We strongly suggest you read the other topics in this section to understand how the functionality in the
+        example template works.</strong></p>
+<p class="media-group"><span class="confluence-embedded-file-wrapper conf-macro output-inline" data-hasbody="false"
+        data-macro-name="view-file" data-macro-id="48d6fc82-570f-4339-ba03-a4becbaf1f51"><a
+            class="confluence-embedded-file"
+            href="/wiki/download/attachments/26522783783/Kitchen_Sink_Template_Example.xlsx?version=1&amp;modificationDate=1689148763460&amp;cacheVersion=1&amp;api=v2"
+            data-nice-type="Microsoft Excel Spreadsheet"
+            data-file-src="/wiki/download/attachments/26522783783/Kitchen_Sink_Template_Example.xlsx?version=1&amp;modificationDate=1689148763460&amp;cacheVersion=1&amp;api=v2"
+            data-linked-resource-id="26522783795" data-linked-resource-type="attachment"
+            data-linked-resource-container-id="26522783783"
+            data-linked-resource-default-alias="Kitchen_Sink_Template_Example.xlsx"
+            data-mime-type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-has-thumbnail="true"
+            data-linked-resource-version="1" data-media-id="eebee43c-5696-4152-8add-3ac5d3bf3dcb"
+            data-media-type="file"><img
+                src="../../../../assets/Outputting Data with Templates/Excel Templates/Kitchen_Sink_Template_Example.xlsx"
+                height="250" /></a></span></p>
+<p />

@@ -1,0 +1,38 @@
+<h2 id="PUTUser-PUTRequest">PUT Request</h2><p>The PUT verb allows you to update a single, existing User on the platform.</p><p>You may use either JSON or XML formats in your request. <br/>You indicate this by setting the ContentType HTTP header as &quot;application/json&quot; or &quot;application/xml&quot;. If no ContentType is specified, XML format is assumed.</p><p>The required and optional parameters for a PUT to the Users API are outlined below.</p><div class="table-wrap"><table data-layout="default" data-local-id="f144a065-e44c-41f6-8c13-180cd5860d64" class="confluenceTable"><colgroup><col style="width: 170.0px;"/><col style="width: 170.0px;"/><col style="width: 170.0px;"/><col style="width: 170.0px;"/></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Parameter Name</strong></p></th><th class="confluenceTh"><p><strong>Data Type</strong></p></th><th class="confluenceTh"><p><strong>Required</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr><tr><td class="confluenceTd"><p>User</p></td><td class="confluenceTd"><p>User</p></td><td class="confluenceTd"><p>Yes</p></td><td class="confluenceTd"><p>The User that you wish to update.  See the User type definition from the GET above.</p></td></tr></tbody></table></div><h2 id="PUTUser-﻿PUTResponse">﻿PUT Response</h2><p>The data returned from a User PUT is provided as follows:</p><p><strong>User Response (&lt;UserResponse&gt;)</strong></p><div class="table-wrap"><table data-layout="default" data-local-id="50d3044e-e350-422a-9d82-54021d1b6378" class="confluenceTable"><colgroup><col style="width: 226.67px;"/><col style="width: 226.67px;"/><col style="width: 226.67px;"/></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Field Name</strong></p></th><th class="confluenceTh"><p><strong>Data Type</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr><tr><td class="confluenceTd"><p>User</p></td><td class="confluenceTd"><p>User</p></td><td class="confluenceTd"><p>The User created.</p></td></tr><tr><td class="confluenceTd"><p>ResponseStatus</p></td><td class="confluenceTd"><p>ResponseStatus</p></td><td class="confluenceTd"><p>Details of any errors that may have occurred</p></td></tr></tbody></table></div><p><strong>User (&lt;User&gt;) Response Fields</strong><br/>The User returned is only populated with the following fields:</p><div class="table-wrap"><table data-layout="default" data-local-id="f624232f-01b2-4159-8938-e6a310738ff5" class="confluenceTable"><colgroup><col style="width: 226.67px;"/><col style="width: 226.67px;"/><col style="width: 226.67px;"/></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Field Name</strong></p></th><th class="confluenceTh"><p><strong>Data Type</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr><tr><td class="confluenceTd"><p>Id</p></td><td class="confluenceTd"><p>GUID</p></td><td class="confluenceTd"><p>Unique identifier of the new User</p></td></tr><tr><td class="confluenceTd"><p>Status</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>Status of this User which will be set to Invited</p></td></tr></tbody></table></div><h2 id="PUTUser-APIUsageExample">API Usage Example</h2><p>Given that the API is REST based, you can access the API directly via your web browser to test it.  Obviously for actual integration works, you will need to make a web request to the given REST URL and then parse the response.</p><p>Below is a simple PUT example which updates an existing User, using XML format.  </p><div class="code panel pdl conf-macro output-block" style="border-width: 1px;" data-hasbody="true" data-macro-name="code" data-macro-id="03273c09-6b38-45c8-966e-b7e7c5b7c0a2"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;User&gt;
+    &lt;CompanyId&gt;0&lt;/CompanyId&gt;
+    &lt;Email&gt;String&lt;/Email&gt;
+    &lt;ExternalId&gt;String&lt;/ExternalId&gt;
+    &lt;FirstName&gt;String&lt;/FirstName&gt;
+    &lt;Folders&gt;
+        &lt;Id&gt;00000000-0000-0000-0000-000000000000&lt;/Id&gt;
+    &lt;/Folders&gt;
+    &lt;Groups&gt;
+        &lt;Id&gt;00000000-0000-0000-0000-000000000000&lt;/Id&gt;
+    &lt;/Groups&gt;
+    &lt;Id&gt;00000000-0000-0000-0000-000000000000&lt;/Id&gt;
+    &lt;IntegrationKey&gt;String&lt;/IntegrationKey&gt;
+    &lt;LastName&gt;String&lt;/LastName&gt;
+    &lt;Password&gt;String&lt;/Password&gt;
+    &lt;Status&gt;String&lt;/Status&gt;
+    &lt;WebsiteRole&gt;String&lt;/WebsiteRole&gt;
+&lt;/User&gt;</pre>
+</div></div><p><strong>XML Response</strong></p><div class="code panel pdl conf-macro output-block" style="border-width: 1px;" data-hasbody="true" data-macro-name="code" data-macro-id="647241e0-26ec-4b5e-afb0-c8268bb91e7e"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;UserResponse&gt;
+    &lt;User&gt;
+        &lt;Id&gt;00000000-0000-0000-0000-000000000000&lt;/Id&gt;
+        &lt;Status&gt;String&lt;/Status&gt;
+    &lt;/User&gt;
+    &lt;ResponseStatus&gt;
+        &lt;ErrorCode&gt;String&lt;/ErrorCode&gt;
+        &lt;Message&gt;String&lt;/Message&gt;
+        &lt;Errors&gt;
+            &lt;ResponseError&gt;
+                &lt;ErrorCode&gt;String&lt;/ErrorCode&gt;
+                &lt;FieldName&gt;String&lt;/FieldName&gt;
+                &lt;Message&gt;String&lt;/Message&gt;
+            &lt;/ResponseError&gt;
+        &lt;/Errors&gt;
+    &lt;/ResponseStatus&gt;
+&lt;/UserResponse&gt;</pre>
+</div></div><p />

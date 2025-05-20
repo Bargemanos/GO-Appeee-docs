@@ -1,0 +1,107 @@
+<p>Below is a list of common scenarios that involve the use of a formula to achieve.</p>
+<p><strong>This is purely a quick reference guide in a Q &amp; A format.</strong></p>
+<p>For more comprehensive explanations including worked examples, please refer to our Recipes.</p>
+<p />
+<p><em><strong>Q: How do I move fields between Pages in the Form designer?</strong></em></p>
+<p><strong>A:</strong> You can move fields between Pages when you place the designer into &quot;continuous&quot;
+    mode.<br />To do this, click the View Mode: &quot;Paged&quot; link near the top right of the designer.<br />This
+    will toggle the designer to show all pages under each other, allowing you to drag between these.</p>
+<p>The other way to move fields is to export your design to Excel, using the Export button on the top right of the
+    designer page.<br />Open the Excel file that downloads and move fields around as needed.<br />Then use the Import
+    button to pull your design back into the platform.</p>
+<p>The Excel import/export option is worth a look because it's also a much faster way to build Forms generally.</p>
+<p><strong>Scenario:</strong></p>
+<p><strong>I have a multiple choice Choices field with options ‘Apple', 'Banana', 'Orange', 'Mango’.</strong></p>
+<p />
+<p><em><strong>Q: How do I access the selected options of the Choices field?</strong></em></p>
+<p><strong>A:</strong> Use the <strong>SELECTED() </strong>function to get a true/false result for each option in your
+    Choices field.<br />e.g. if you want to control visibility of other fields in your Form based on if the Apple option
+    is selected:</p>
+<p><strong>SELECTED({{mychoicesfield}}, 'Apple')</strong></p>
+<p><strong>Scenario:</strong></p>
+<p><strong>I have a set of Choices fields with data names of q1, q2, q3, q4.  All have fixed answer options - e.g. 'Y',
+        'N', 'N/A'.</strong></p>
+<p />
+<p><em><strong>Q: How do I join the answers from these fields into one single text string?</strong></em></p>
+<p><strong>A:</strong> Use the <strong>CONCAT() </strong>function to create the desired result, much like you would with
+    the Microsoft Excel CONCATENATE function.<br />You can mix dynamic answers with static bits of text as needed.</p>
+<p><strong>CONCAT('Question 1 Answer: ', {{q1}}, '; Question 2 Answer: ', {{q2}}, '; Question 3 Was: ', {{q3}})</strong>
+</p>
+<p />
+<p><em><strong>Q: How do I count how many questions were answered as 'Y'?</strong></em></p>
+<p><strong>A:</strong> Use the <strong>IF()</strong> function to check whether the answer for each question = 'Y' and
+    assign either a 1 or a 0 based on a true/false result of the = 'Y'.</p>
+<p><strong>IF({{q1}} = 'Y', 1, 0) + IF({{q2}} = 'Y', 1, 0)  + IF({{q3}} = 'Y', 1, 0)  + IF({{q4}} = 'Y', 1, 0)</strong>
+</p>
+<p />
+<p><em><strong>Q: How do I assign a score to each answer option, and total up the score for all questions? e.g. 'Y' = 3,
+            'N' = 1, 'N/A' = 0</strong></em></p>
+<p><strong>A1:</strong> Make your answer options have a value of the score in question instead of 'Y', 'N',
+    'N/A'.<br />You can still have the display text of each option be 'Yes', 'No', 'N/A' so that the app user know what
+    to choose.<br />e.g. your Yes option would have answer value of 3 and display text of 'Yes'.</p>
+<p>This is the simplest approach since then all you need to do for a totalling formula is:</p>
+<p><strong>{{q1}} + {{q2}} + {{q3}} + {{q4}}</strong></p>
+<p><strong>A2: </strong>Use the <strong>IF()</strong> function in a nested fashion to check the value of each answer and
+    assign the relevant score based on a true/false result.</p>
+<p><strong>IF({{q1}} = 'Y', 3, IF({{q1}} = 'N', 1, 0)) + </strong></p>
+<p><strong>IF({{q2}} = 'Y', 3, IF({{q2}} = 'N', 1, 0)) + </strong></p>
+<p><strong>IF({{q3}} = 'Y', 3, IF({{q3}} = 'N', 1, 0)) +</strong></p>
+<p><strong>IF({{q4}} = 'Y', 3, IF({{q4}} = 'N', 1, 0))</strong></p>
+<p><strong>A3:</strong> Add a hidden field for each question, with the hidden field containing just the
+    <strong>IF()</strong> formula for it's associated question.<br />e.g. Hidden field named q1Score would have a
+    Dynamic Value formula of <strong>IF({{q1}} = 'Y', 3, if({{q1}} = 'N', 1, 0))</strong></p>
+<p><em><strong>Q: I am assigning the NOW() / UTCNOW() formula function to a field, but the time part is getting
+            lost!</strong></em><br /><strong>A: </strong>If you are assigning NOW() to a text field, or indirectly
+    assigning to a text value (e.g. as in your Hidden field), then you will always get just a date value, since the app
+    is auto-converting from date/time data to textual data.</p>
+<p>To explicitly get the time portion of the NOW() value, you need to wrap your use of the NOW() value in a
+    FORMAT-DATE() function, specifying the time value as part of the desired text
+    output.<br />e.g.<br /><strong>FORMAT-DATE(NOW(), 'yyyy/dd/MM HH:mm:ss')</strong></p>
+<p />
+<p><em><strong>Q: How can I set a date/timestamp to be stored for the exact moment a button is pressed?</strong></em>
+</p>
+<p><strong>A:</strong> The Button field type allows you to set an answer value when the button is pressed - see the
+    &quot;Interaction Result&quot; result.<br />The result value must be a static text value, we don't currently support
+    formulae in that option.<br />So for example you can have the Interaction Result be something like
+    &quot;Pressed&quot;.</p>
+<p>The reason we mention this is that you can then hook an additional field - e.g. a Hidden field - to be updated when
+    the Button field has it's value set.<br />You would do this by specifying a Dynamic Value formula for your Hidden
+    field, where the NOW() function would be called based on whether the Button field has a value or
+    not.<br />e.g.<br /><strong>IF({{mybuttonfield}} = 'Pressed', FORMAT-DATE(NOW(), 'yyyy/dd/MM HH:mm:ss'),
+        '')</strong></p>
+<p>Note that in the above example formula, you must use the FORMAT-DATE() function to specify the date/time output you
+    desire.<br />See the Formula Builder help hints for the FORMAT-DATE function to understand more about the formatting
+    options.</p>
+<p />
+<p><em><strong>Q: How can I create a counter/clicker in my Form which increases/decreases a number each time the user
+            presses a button?</strong></em></p>
+<p><strong>A:</strong> A combination of Action field type features allow you to create counter functionality.<br />Use
+    the “Always Trigger On Button Press” option found on Action fields in the Form designer.<br />By default, buttons
+    only trigger any dependent formulae once; on the first time a user taps - the above option will trigger dependent
+    formulae every time the button is pressed.<br />Action fields also set their answer to be the title of the pressed
+    button by default.  <br />This is useful for cases where you have multiple buttons in a field and need to run
+    formulae based on which button was pressed.</p>
+<p>Lets assume you have an action field with data name of &quot;actionfield&quot;, with two buttons defined - one with
+    title &quot;Increase&quot; and the other with title &quot;Decrease&quot;. We also assume you have a Number field
+    with data name of &quot;numfield&quot;.</p>
+<p>On your Number field, set the Dynamic Value property to be:<br /><strong>IF( NOTBLANK({{actionfield}}), IF(
+        {{actionfield}} = 'Increase', VAL('numfield')+1, VAL('numfield')-1 ), 0 )</strong></p>
+<p>There are a few things going on in the above formula:</p>
+<ul>
+    <li>
+        <p>Firstly we check if the Action field has a value set via NOTBLANK().<br />If there is no value, then the
+            numfield will be set to 0 since no buttons have been pressed yet.</p>
+    </li>
+    <li>
+        <p>If the button field does have a value, then this means one of our buttons have been tapped by the
+            user.<br />So the next part of the formula is now checking which button got pressed.</p>
+    </li>
+    <li>
+        <p>If the button titled &quot;Increase&quot; got tapped, then we get the current value of the numfield via VAL()
+            and add 1.</p>
+    </li>
+    <li>
+        <p>Otherwise we assume the &quot;Decrease&quot; button was tapped and we get the current numfield value and
+            subtract 1.</p>
+    </li>
+</ul>

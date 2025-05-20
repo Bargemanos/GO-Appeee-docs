@@ -1,0 +1,316 @@
+<p>Often you may want to allow the user to create, update or even delete rows on your Data Sources.</p>
+<p>This is supported on our platform by setting up a Form in a few ways.</p>
+<p>Note, the following functionality only works with existing data sources, hence you need to create the data source
+    first before creating any data entry forms to create, update or delete rows from a data source. This is key as
+    Choices fields or Hidden Data Source fields need to be linked to the existing data source and additional fields
+    could be required or optionally bound to columns in the data source, to display a row's column data.</p>
+<div class="toc-macro client-side-toc-macro  conf-macro output-block" data-headerelements="H1,H2,H3,H4,H5,H6,H7"
+    data-hasbody="false" data-macro-name="toc" data-macro-id="3bace779-431d-4b22-9132-34838ea59388"
+    data-layout="default" data-local-id="bd18b72f-afb4-44bc-b8ac-342aa5dae524"> </div>
+<hr />
+<h2 id="Creating,UpdatingandDeletingRowsinaDataSource-CreatingorUpdatingaRow(NewScreen)">Creating or Updating a Row (New
+    Screen)</h2>
+<p>When you're looking to create a new Data Entry Form that can create or update a row in a data source, the simplest
+    way to achieve this is to link a Data Source to the form before creating the form, before clicking
+    &quot;Create&quot;.</p>
+<p><strong>Screens Page: </strong>Create New Screen</p><span
+    class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center"
+        loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204935.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204935.png"
+        data-height="755" data-width="1950" data-unresolved-comment-count="0" data-linked-resource-id="26522784652"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-204935.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="b43fe538-34c3-481f-953c-c497a54c1ed7" data-media-type="file"></span>
+<p>What this does is, when the form is created and the page is refreshed on the Form Designer page, the form will be
+    prepopulated with a Choices field that is linked to the data source with its &quot;Create/Update Row&quot; property
+    ticked, allowing the creation and updating of bound fields.</p>
+<p><strong>Form Designer:</strong> Choices field linked to Data Source and configured to Create/Update Row</p><span
+    class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center"
+        loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204949.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204949.png"
+        data-height="690" data-width="2166" data-unresolved-comment-count="0" data-linked-resource-id="26522784649"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-204949.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="459e4008-1ba1-4a4c-8635-b02b2187ace6" data-media-type="file"></span>
+<p>And, all columns from the Data Source will be added as fields, titled accordingly to column headers from the Data
+    Source and bound respectively.</p>
+<p>This binding means that the selected row's value for the given column will be set into the field, and also any edits
+    in the field will be written back to that column.</p>
+<p><strong>Form Designer: </strong>Text field bound to Data Source column</p><span
+    class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img
+        class="confluence-embedded-image image-center" width="680" loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204959.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-204959.png"
+        data-height="931" data-width="2165" data-unresolved-comment-count="0" data-linked-resource-id="26522784646"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-204959.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="a489b11d-7e61-4f18-884c-5ff69139bedd" data-media-type="file"
+        srcset="https://goconnectitgroup.atlassian.net/wiki/download/thumbnails/26522784614/image-20221027-204959.png?version=1&amp;modificationDate=1689148777941&amp;cacheVersion=1&amp;api=v2&amp;width=1360&amp;height=584 2x, https://goconnectitgroup.atlassian.net/wiki/download/thumbnails/26522784614/image-20221027-204959.png?version=1&amp;modificationDate=1689148777941&amp;cacheVersion=1&amp;api=v2&amp;width=680&amp;height=292 1x"></span>
+<p>Note, prepopulated fields will only be of Text/Nuermic type, if your data source contains Date/Time, Location, Image
+    data etc then you'll need to change these field types in the Form Designer and bind them to their respective Data
+    Source column.</p>
+<p>In-app, a user will now be able to select a row from the Choices field and update all fields except the Data Source's
+    initial/unique ID column (column 0).</p>
+<p>If the Choices field is left blank, a new row will be created and the platform will generate a unique ID for the data
+    source's initial column</p>
+<p>However, if you're looking to create a new row and enter your own row ID into the data source's initial column and
+    not use the platform's generated ID.</p>
+<p>Then we suggest adding another field that is bound to the initial column to only display when the Choices field is
+    blank. Note, this field's data will need to be unique and not match any existing column data as the platform will
+    only identify rows with non-duplicate values within the unique column/column 0.</p>
+<p><strong>Most importantly,</strong> this method demonstrates the required steps for linking a data source to a form
+    and binding fields to data source columns for row creating/updating/deleting.</p>
+<p>Basically:</p>
+<ol start="1">
+    <li>
+        <p>Have a <strong>Choices or Hidden Data Source field</strong> in your form</p>
+    </li>
+    <li>
+        <p><strong>Link a Data Source</strong> to the Choices or Hidden Data Source field</p>
+    </li>
+    <li>
+        <p>Make sure the <strong>value column of the linking field</strong> (Choices/Hidden Data Source) is set to the
+            <strong>Data Source's unique column</strong></p>
+    </li>
+    <li>
+        <p><strong>Tick </strong>the desired property - <strong>Create/Update Row</strong> OR <strong>Delete</strong>
+        </p>
+    </li>
+    <li>
+        <p>If Creating/Updating, add additional fields and &quot;Bind to Data Source Column&quot; to display data,
+            respectively</p>
+    </li>
+    <li>
+        <p>If Deleting, add at least one additional field and bind it to the unique column of the Data Source.
+            Additional fields can be added and bound accordingly to display data aiding the user in confirming the
+            correct row is being deleted.</p>
+    </li>
+</ol>
+<hr />
+<h2 id="Creating,UpdatingandDeletingRowsinaDataSource-CreatingorUpdatingaRow(ExistingScreen)">Creating or Updating a Row
+    (Existing Screen)</h2>
+<p>Using a Choices field (allows for initial row selection)</p>
+<ul>
+    <li>
+        <p>Add a Choices field</p>
+    </li>
+    <li>
+        <p>Link to Data Source</p>
+    </li>
+    <li>
+        <p>Tick &quot;Update/Create Row&quot; property</p>
+    </li>
+    <li>
+        <p>Add additional fields and set the &quot;Bind To Data Source Column&quot; property accordingly to update
+            column data</p>
+    </li>
+</ul>
+<p>Using a Hidden Data Source (doesn't allow for initial row selection hence requires filtering for row selection)</p>
+<ul>
+    <li>
+        <p>Add a Hidden Data Source field</p>
+    </li>
+    <li>
+        <p>Link to Data Source</p>
+    </li>
+    <li>
+        <p>Tick &quot;Update/Create Row&quot; property</p>
+    </li>
+    <li>
+        <p>Add a field that will allow the user to enter in a value to match the data source's initial column or select
+            from a list (via Choices) to filter the Hidden Data Source</p>
+    </li>
+    <li>
+        <p>Add criteria or formula to the Hidden Data Source allowing the Hidden Data Source to filter the row based on
+            the user's entered/selected value (This is what selects the row to be updated)</p>
+    </li>
+    <li>
+        <p>Add additional fields and set the &quot;Bind To Data Source Column&quot; property accordingly to update
+            column data</p>
+    </li>
+</ul>
+<hr />
+<h2 id="Creating,UpdatingandDeletingRowsinaDataSource-DeletingaRow">Deleting a Row</h2>
+<p>For deletion cases, you must build a separate Form that will perform row deletes - i.e. you might have a Form already
+    that does add/edit, but to do deletes you create a separate Form design.</p>
+<p>This is an intentional platform approach since it means the deletion operation is always silo'd to a dedicated Form
+    design, which in turn avoids situations where a user might delete a row when they thought they were
+    inserting/updating it.</p>
+<p>Once you have created your dedicated &quot;Delete&quot; Form:</p>
+<ol start="1">
+    <li>
+        <p>Add a Choices field</p>
+    </li>
+    <li>
+        <p>Link the Choices field to your target Data Source.</p>
+    </li>
+    <li>
+        <p>Tick the &quot;Delete Row&quot; property on your Choices field or a Hidden Data Source field.<br />This
+            instructs the Form to delete the selected row found in your Choices field when the user uploads the Form
+            entry. Deletion is performed based on the value in the first column of the row - remember our system always
+            treats the first column as the row's unique identifier.</p><span
+            class="confluence-embedded-file-wrapper image-center-wrapper"><img
+                class="confluence-embedded-image image-center" loading="lazy"
+                src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205110.png"
+                data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205110.png"
+                data-height="808" data-width="2165" data-unresolved-comment-count="0"
+                data-linked-resource-id="26522784643" data-linked-resource-version="1"
+                data-linked-resource-type="attachment" data-linked-resource-default-alias="image-20221027-205110.png"
+                data-base-url="https://goconnectitgroup.atlassian.net/wiki"
+                data-linked-resource-content-type="image/png" data-linked-resource-container-id="26522784614"
+                data-linked-resource-container-version="1" data-media-id="12938fd2-8193-48b5-94de-f5e399c77673"
+                data-media-type="file"></span>
+    </li>
+    <li>
+        <p><strong>You then need to have at least one field that is bound to a column (i.e Column 0) in the data
+                source.</strong> This is by design in order for the form screen to validate exactly which data source
+            row should be deleted when a form entry gets uploaded.<br /><br />You may want to add some read-only fields
+            which use the &quot;Bind to Data Source Column&quot; option to display additional column information to the
+            user, allowing them to confirm the correct row is selected for deletion.</p>
+    </li>
+</ol><span class="confluence-embedded-file-wrapper image-center-wrapper"><img
+        class="confluence-embedded-image image-center" loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205113.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205113.png"
+        data-height="936" data-width="2165" data-unresolved-comment-count="0" data-linked-resource-id="26522784640"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-205113.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="74aaadaa-6e7d-4013-bd86-299fd0cbd32b" data-media-type="file"></span>
+<hr />
+<h2 id="Creating,UpdatingandDeletingRowsinaDataSource-CreatingorUpdatingMultipleRows">Creating or Updating Multiple Rows
+</h2>
+<p>If your Create/Update form has a repeatable page similarly set up as the example from the above &quot;Creating or
+    Updating a Row (New Screen)&quot; section, then any row selection for each repeat from the Choices field will be
+    updated or if not selected will create a new row.</p>
+<p><strong>Page Field: </strong>Repeatable</p>
+<ol start="1">
+    <li>
+        <p>Add/Select Page field</p>
+    </li>
+    <li>
+        <p>Tick the Page field's &quot;Repeatable&quot; property</p>
+    </li>
+</ol><span class="confluence-embedded-file-wrapper image-center-wrapper"><img
+        class="confluence-embedded-image image-center" loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205127.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205127.png"
+        data-height="633" data-width="2166" data-unresolved-comment-count="0" data-linked-resource-id="26522784637"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-205127.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="048c0afe-ec78-4325-b1f5-d79a1376dca5" data-media-type="file"></span>
+<p>Alternatively, a Table field can be used with its &quot;Populate From Data Source&quot; property set, containing
+    fields bound to desired data source columns that will not only display rows from the data source but also create new
+    rows added to the table and update any changes made to existing rows displayed in the app.</p>
+<p><strong>Table Field: </strong>Populate From Data Source</p>
+<ol start="1">
+    <li>
+        <p>Add/Select Table field</p>
+    </li>
+    <li>
+        <p>Tick &quot;Populate From Data Source&quot; property of Table field</p>
+    </li>
+    <li>
+        <p>Link a Data Source</p>
+    </li>
+    <li>
+        <p>Tick &quot;Create/Update Row&quot;</p>
+    </li>
+    <li>
+        <p>Add fields into the Table field and &quot;Bind to Data Source Column&quot; property accordingly</p>
+    </li>
+</ol><span class="confluence-embedded-file-wrapper image-center-wrapper"><img
+        class="confluence-embedded-image image-center" loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205139.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205139.png"
+        data-height="1008" data-width="2165" data-unresolved-comment-count="0" data-linked-resource-id="26522784634"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-205139.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="4f755a81-46e6-4372-a51e-a44ef25b9e40" data-media-type="file"></span>
+<p>More information on our Table field type can be found <a href="/wiki/spaces/GSD/pages/26522781798/Table+Field+Type"
+        data-linked-resource-id="26522781798" data-linked-resource-version="1"
+        data-linked-resource-type="page">here</a>.</p>
+<hr />
+<h2 id="Creating,UpdatingandDeletingRowsinaDataSource-Tips&amp;Tricks">Tips &amp; Tricks</h2>
+<p><strong>Adding a Dummy Row to Display &quot;Add New Row&quot; Text as a Choices field Option (instead of leaving
+        blank)</strong></p>
+<p>In reference to the example provided in &quot;Creating or Updating a Row (New Screen)&quot;, and the functionality of
+    leaving the Choices field blank, i.e. no option selected, to create a new row.</p>
+<p>If you'd prefer to have the end-user select an option of &quot;Add New Row&quot; for example, this is achievable by
+    creating a dummy row in the Data Source.</p>
+<p>Create a &quot;dummy&quot; row in your Data Source by adding a row with the column 0 (initial column) with the value
+    0 (zero), and in column 1 with the text &quot;Add New Row&quot; for example.</p><span
+    class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center"
+        loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205154.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205154.png"
+        data-height="560" data-width="1950" data-unresolved-comment-count="0" data-linked-resource-id="26522784631"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-205154.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="8f119a3f-a129-426e-947e-0e80bc1ee0a1" data-media-type="file"></span>
+<p />
+<p>The <strong>app is coded to treat 0 value rows as being a new row</strong>, and it will auto-generate a 36 character
+    unique key (a GUID) for the row to ensure uniqueness.</p>
+<p>This way the user can select this row from the list to add a new row. When a Choices field's <strong>display
+        column</strong> is set to column 1 displaying &quot;Add New Row&quot; and <strong>value column</strong> set to
+    column 0 when linked to Data Source. </p>
+<p>Setting the displayable title column of this dummy row will make the purpose of the dummy row clear to the user.</p>
+<p>If you want the dummy row to always be visible as an option on the Choices field, then set the Default Value property
+    to 0 and tick on the &quot;Always Show Default Option&quot; property.</p><span
+    class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center"
+        loading="lazy"
+        src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205207.png"
+        data-image-src="../../../../assets/Data Sources/Creating, Updating and Deleting Rows in a Data Source/image-20221027-205207.png"
+        data-height="1290" data-width="2168" data-unresolved-comment-count="0" data-linked-resource-id="26522784628"
+        data-linked-resource-version="1" data-linked-resource-type="attachment"
+        data-linked-resource-default-alias="image-20221027-205207.png"
+        data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png"
+        data-linked-resource-container-id="26522784614" data-linked-resource-container-version="1"
+        data-media-id="340494c1-adf1-4c82-968e-c59b9099ddb5" data-media-type="file"></span>
+<p>Once you have implemented the above, test out your Form to see the results.<br />Try selecting an existing row and
+    editing it, and also try creating a new row.</p>
+<p>The Data Source will be automatically updated with the new row/update row, both on-device and then on the central
+    data source on the web platform, once the form has been completed and uploaded.</p>
+<p>Adding a dummy row also becomes handy when you need to conditionally add or update a row based on a condition, you
+    can then use a filter formula that will specify the dummy row for a new row or an existing row to update.</p>
+<h3 id="Creating,UpdatingandDeletingRowsinaDataSource-HostedGETConsiderationsWhenCreatingNewRows"><strong>Hosted GET
+        Considerations When Creating New Rows</strong></h3>
+<p>If the Data Source you are updating is supplied to the app via a Hosted GET, then read on to review the integration
+    considerations involved.</p>
+<p>Here's what happens when a new row is created on the app:</p>
+<p><strong>1.</strong> A new record gets created with the Form Entry Id as the row's identifier in the local app-side
+    Data Source copy. This is done to give a consistent user experience, in that the user can see the new row they
+    created any Data Source listings immediately after completing their creation Form entry.</p>
+<p><strong>2.</strong> When a Hosted GET is involved, we expect your system to receive the new Form Entry (e.g. via a
+    REST connector on the Form), process it and check whether the Choices/Data Source field value matches the Form Entry
+    id. If your service finds this, then your system knows that this entry created a new row and you can process
+    accordingly, creating a matching new row on your system with a new system-assigned id.</p>
+<p><strong>3a.</strong> If your Hosted GET does a full replace of rows on every call from the app - i.e. using the Rows
+    property on your responses -  then you're done, nothing more to do :)<br />The next Hosted GET sync will clear all
+    existing app rows (including the one stored locally with the Form Entry id) and replace it with your system's rows
+    (including your new system assigned row).</p>
+<p><em>OTHERWISE</em></p>
+<p><strong>3b.</strong> If you are making incremental updates on the Hosted GET - i.e. sending NewRows and DeletedRows
+    back on your responses - then there is still the matter of removing the local app created new row identified by the
+    Form Entry id, and adding your new system assigned row.</p>
+<p>So when receiving the Form Entry on your web service, you will need to track the user's device id and Form Entry Id
+    for use by your Hosted GET service, since you need to replace the app's local new row with your system assigned new
+    row. On the next app sync from the user's device (identified by their device id), your Hosted GET should then send a
+    DeletedRows value containing the stored Form entry id, along with a NewRows value containing the new system assigned
+    row values. This will cause the app to delete the local entry id based row, and add the new system assigned row.</p>
+<p />

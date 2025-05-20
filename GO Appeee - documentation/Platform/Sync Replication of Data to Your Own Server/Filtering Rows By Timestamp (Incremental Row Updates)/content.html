@@ -1,0 +1,33 @@
+<p>If your data set is very large, then instead of having the app download all rows on each synchronisation, you can
+    implement incremental row updates based on a timestamp and deletion status. </p>
+<p>This will result in only the changed/deleted rows being downloaded by the app after it’s first initial
+    synchronisation, which should improve performance and reduce mobile data usage for workers in the field.</p>
+<p>To enable, add the following columns to your SyncData tables (column names must match exactly and should be added to
+    the end of the table):</p>
+<ol start="1">
+    <li>
+        <p><strong>_lastUpdated</strong><br />This column contains the date-time value that the record was last updated
+            and is used as a check when retrieving data to prevent retrieving old rows.<br /></p>
+    </li>
+    <li>
+        <p><strong>_deleted</strong><br />A boolean column that represents whether or not this row has been deleted.</p>
+    </li>
+</ol>
+<p>As soon as you add a _lastUpdated column, then Sync will assume you want to run in incremental update mode and will
+    use the _lastUpdated values as a row filtering mechanism, only returning rows that have _lastUpdated greater than
+    the lastupdated parameter value received from the app's REST request to the Sync web service.</p>
+<p>If you add a _lastUpdated column, ensure it is a <strong>not null</strong> column of <strong>DateTime</strong> data
+    type. All values must be in <strong>UTC</strong> timezone, and it is your responsibility to handle the updating of
+    this _lastUpdated column whenever you make changes to the rows in that table.<br />e.g. if you add or update a row,
+    then make sure _lastUpdated for that row is always set using the SQL Server <strong>getutcdate()</strong> function.
+</p>
+<p>Additionally, if you are going to be deleting rows while using the _lastUpdated facility, then you must add a
+    _deleted column which is not null and of BIT data type. When you want to apply a deletion of a row from the table,
+    instead of using the DELETE sql command, rather update the target row's _deleted to 1 (true) and set the
+    _lastUpdated using <strong>getutcdate()</strong>. This is important because if you were to just delete rows from the
+    table, then the app will never know about this and the row may persist for a period on the app going forward.</p>
+<p>When implementing incremental updates, we strongly recommend that you try this out first in a testing account with a
+    test install of Sync to see if it works for your specific scenarios. Assuming it works well in your testing, then
+    you should be able to simply reuse the same SQL scripts to apply incremental updating columns to your production
+    environments in turn.</p>
+<p />

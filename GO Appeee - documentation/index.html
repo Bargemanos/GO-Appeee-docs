@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Appeee Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --text-color: #333;
+            --background-color: #f5f6fa;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-code: 'Source Code Pro', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            display: flex;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .sidebar {
+            width: 360px;
+            background: white;
+            padding: 0;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 2;
+            padding: 20px 20px 10px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .sidebar-header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-header .search-box {
+            margin-bottom: 0;
+        }
+
+        .sidebar-menu-scroll {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 0 20px 20px 20px;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 360px;
+            height: 100vh;
+            background-color: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(52, 152, 219, 0.02) 100%);
+            z-index: 0;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            margin: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a5276 100%);
+            color: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .search-box {
+            margin: 1rem 0;
+            padding: 0.8rem 1rem;
+            width: 100%;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            font-family: var(--font-main);
+            font-weight: 400;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+        }
+
+        .search-box::placeholder {
+            color: #3498db;
+            opacity: 0.7;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #217dbb;
+            background-color: #eaf6fb;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.15);
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-section h2 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-list a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            font-size: 0.95rem;
+        }
+
+        .nav-list a:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .sub-list {
+            list-style: none;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            display: none;
+            padding-left: 0.5rem;
+            border-left: 2px solid #e0e0e0;
+        }
+
+        .sub-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .sub-list a {
+            color: #555;
+            font-size: 0.9em;
+            padding: 0.4rem 0.8rem;
+            display: block;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: 400;
+        }
+
+        .sub-list a:hover {
+            background-color: #f0f0f0;
+            color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .has-children > a {
+            position: relative;
+            padding-right: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .has-children > a::after {
+            content: '▼';
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+            color: #666;
+        }
+
+        .has-children.active > a::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .has-children.active > .sub-list {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .active-link {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .sub-list .active-link {
+            background-color: #e3f2fd;
+            color: var(--secondary-color);
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .content {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            iframe {
+                margin: 10px;
+            }
+
+            .nav-section {
+                margin-bottom: 1rem;
+            }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        code, pre {
+            font-family: var(--font-code);
+            font-size: 0.9em;
+        }
+
+        .breadcrumbs {
+            margin: 24px 0 24px 0;
+            padding: 0 24px;
+            font-size: 1.05rem;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>GO Appeee Documentation</h1>
+            <input type="text" class="search-box" placeholder="Search documentation...">
+        </div>
+        <div class="sidebar-menu-scroll">
+            <div class="nav-section">
+                <h2>Platform</h2>
+                <ul class="nav-list">
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Getting Started/content.html">Getting Started</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Getting Started/App Setup Page/content.html">App Setup Page</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Using Images in Your Apps/content.html">Using Images in Your Apps</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Pushing_Pulling Data To_From Other Systems/content.html">Pushing/Pulling Data</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Testing Your Screen Designs (TEST Mode)/content.html">Testing Your Screen Designs</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Key Concept Docs/content.html">Key Concept: Docs</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Key Concept Tasks (Job Dispatch)/content.html">Key Concept: Tasks</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Key Concept Data Sources/content.html">Key Concept: Data Sources</a></li>
+                            <li><a href="#" data-content="Platform/Getting Started/Key Concept Screens/content.html">Key Concept: Screens</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/content.html">FAQ & Troubleshooting</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Can%20I%20add_store%20metadata%20values%20to%20user%20and%20organisation%20accounts_/content.html">Can I add_store metadata values to user and organisation accounts_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Can%20I%20launch%20other%20apps%20on%20the%20user's%20device%20from%20within%20a%20Screen_/content.html">Can I launch other apps on the user's device from within a Screen_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Can%20I%20print%20labels%20and%20other%20content%20directly%20from%20the%20app_/content.html">Can I print labels and other content directly from the app_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Can%20I%20use%20external%20GPS%20devices%20with%20the%20app_/content.html">Can I use external GPS devices with the app_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Does%20the%20app%20work%20offline%20(without%20internet%20connection)_/content.html">Does the app work offline (without internet connection)_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Enabling%20Location_GPS%20on%20Windows%20devices/content.html">Enabling Location_GPS on Windows devices</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/GPS%20capture%20is%20sometimes%20slow%20or%20doesn't%20work%20-%20why_/content.html">GPS capture is sometimes slow or doesn't work - why_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20can%20I%20control%20the%20quality%20_%20size%20_%20megapixels%20of%20images%20%26%20photos%20in%20Forms_/content.html">How can I control the quality _ size _ megapixels of images & photos in Forms_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20can%20I%20display%20a%20list%20of%20location%20addresses%20on%20a%20map_/content.html">How can I display a list of location addresses on a map_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20can%20I%20improve%20battery%20life%20of%20devices%20in%20the%20field_/content.html">How can I improve battery life of devices in the field_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20can%20I%20pull_push%20data%20from_to%20other%20systems_/content.html">How can I pull_push data from_to other systems_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20do%20I%20connect%20my%20account%20to%20Google%20Drive_Spreadsheet_Dropbox_FTP_OneDrive%20etc_/content.html">How do I connect my account to Google Drive_Spreadsheet_Dropbox_FTP_OneDrive etc_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20do%20I%20filter%20what%20users%20see%20on%20the%20app_website_/content.html">How do I filter what users see on the app_website_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20do%20I%20get%20the%20best_most%20accurate%20geocoding%20results%20for%20addresses_/content.html">How do I get the best_most accurate geocoding results for addresses_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/How%20do%20I%20log%20into%20the%20mobile%20app_/content.html">How do I log into the mobile app_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/My%20connectors_jobs%20don't%20run%20immediately!%20Why_/content.html">My connectors_jobs don't run immediately! Why_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Photos_Videos_Audio%20files%20aren't%20available%20on%20the%20Data%20page!%20Why_/content.html">Photos_Videos_Audio files aren't available on the Data page! Why_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Screens_Docs%20don't%20show%20on%20my%20device%20anymore!%20Why_/content.html">Screens_Docs don't show on my device anymore! Why_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/What%20are%20the%20limits_maximum%20fields%20that%20I%20can%20have%20in%20a%20Screen_/content.html">What are the limits_maximum fields that I can have in a Screen_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/What%20are%20the%20Windows%20app%20installation%20requirements_%20(e.g.%20for%20enterprise%20deployments)/content.html">What are the Windows app installation requirements_ (e.g. for enterprise deployments)</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/What%20is%20the%20cloud%20platform's%20IP%20address_%20(for%20firewall%20_%20white%20listing%20purposes)/content.html">What is the cloud platform's IP address_ (for firewall _ white listing purposes)</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/What's%20the%20difference%20between%20Form%20entry%20Completed%20time%20and%20Received%20time_/content.html">What's the difference between Form entry Completed time and Received time_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/When%20does%20the%20app%20synchronise_check%20for%20updates_/content.html">When does the app synchronise_check for updates_</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Why%20can't%20my%20Android%20devices%20receive%20data_%20(Android%20SSL%20Certificate%20Issues)/content.html">Why can't my Android devices receive data_ (Android SSL Certificate Issues)</a></li>
+                            <li><a href="#" data-content="Platform/FAQ%20%26%20Troubleshooting/Why%20don't%20I%20receive%20Push%20Notifications%20on%20my%20app_/content.html">Why don't I receive Push Notifications on my app_</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Form Screens/content.html">Form Screens</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Form Screens/Introduction/content.html">Introduction</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Designing Forms/content.html">Designing Forms</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Form Settings/content.html">Form Settings</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Board of Icons Screen Type/content.html">Board of Icons Screen Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/List of Data Screen Type/content.html">List of Data Screen Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Details Screen Type/content.html">Details Screen Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Map of a Data Source Screen Type/content.html">Map of a Data Source Screen Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Forms FAQ/content.html">Forms FAQ</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Creating a Formula/content.html">Creating a Formula</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Formula Operators & Functions/content.html">Formula Operators & Functions</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Importing Fields From Excel/content.html">Importing Fields From Excel</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Dynamic Features/content.html">Dynamic Features</a></li>
+                            <li><a href="#" data-content="Platform/Form Screens/Referring to column values of a selected Data Source row/content.html">Referring to column values</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Form Fields/content.html">Form Fields</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Form Fields/Field Types/content.html">Field Types</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Action Field Type/content.html">Action Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Attach Field Type/content.html">Attach Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Auto Numbering Field Type/content.html">Auto Numbering Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Barcode Field Type/content.html">Barcode Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Choices Field Type/content.html">Choices Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Contactless Signature/content.html">Contactless Signature</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Date_Time Field Type/content.html">Date/Time Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Gallery Field Type/content.html">Gallery Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Media Field Type/content.html">Media Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/NFC Field Type/content.html">NFC Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/OCR Field Type/content.html">OCR Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Page Field Type/content.html">Page Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/QR Code Field Type/content.html">QR Code Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/REST Field Type/content.html">REST Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/Sketch Field Type/content.html">Sketch Field Type</a></li>
+                            <li><a href="#" data-content="Platform/Form Fields/_Table Field Type/content.html">Table Field Type</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Form Connectors/content.html">Form Connectors</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Form Connectors/Common Connector Settings/content.html">Common Connector Settings</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/120 Second Time Limit on Form Connectors/content.html">120 Second Time Limit</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/FAQ - Form Connectors/content.html">FAQ - Form Connectors</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Email/content.html">Email</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Google Spreadsheet/content.html">Google Spreadsheet</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/REST/content.html">REST</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/SQL Connector/content.html">SQL Connector</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/SharePoint List Connector/content.html">SharePoint List Connector</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Google BigQuery Form Connector/content.html">Google BigQuery</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/GeoOp/content.html">GeoOp</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Amazon S3 Connector/content.html">Amazon S3</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Google Drive Connector/content.html">Google Drive</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/OneDrive Personal Connector/content.html">OneDrive Personal</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Azure Blob Connector/content.html">Azure Blob</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Power BI Connector/content.html">Power BI</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Egnyte Connector/content.html">Egnyte</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Salesforce Form Connectors/content.html">Salesforce</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/NetSuite Form Connectors/content.html">NetSuite</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Snowflake Form Connectors/content.html">Snowflake</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Twilio Connector/content.html">Twilio</a></li>
+                            <li><a href="#" data-content="Platform/Form Connectors/Excel Online Connector/content.html">Excel Online</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Form Recipes/content.html">Form Recipes</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Form Recipes/Allowing%20Users%20to%20Jump%20Pages%20(Custom%20Form%20Navigation)/content.html">Allowing Users to Jump Pages (Custom Form Navigation)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Calculating%20the%20duration_time%20elapsed%20between%20Form%20start%20and%20finish%20(or%20between%20two%20fields)/content.html">Calculating the duration_time elapsed between Form start and finish (or between two fields)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Capturing%20Repeatable%20Data/content.html">Capturing Repeatable Data</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Cascading%20Choices%20(also%20know%20as%20Parent-Child)/content.html">Cascading Choices (also know as Parent-Child)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Conditionally%20Required%20Fields%20(Required%20Condition)/content.html">Conditionally Required Fields (Required Condition)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Customising%20Titles%20of%20In-Progress%20Form%20Entries/content.html">Customising Titles of In-Progress Form Entries</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Dynamic%20Answers%20%26%20Calculations%20(Dynamic%20Values)/content.html">Dynamic Answers & Calculations (Dynamic Values)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Dynamic%20Titles%20and%20Hints/content.html">Dynamic Titles and Hints</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Dynamically%20Displaying%20Images%20from%20Data%20Source,%20Web%20or%20Map%20sources/content.html">Dynamically Displaying Images from Data Source, Web or Map sources</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Formula%20Cheat%20Sheet/content.html">Formula Cheat Sheet</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Formula%20Quick%20Question_Answer%20Reference/content.html">Formula Quick Question_Answer Reference</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Generating%20a%20Unique%20Number_Code/content.html">Generating a Unique Number_Code</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Looking%20Up%20A%20Data%20Source%20Row%20From%20a%20Barcode%20Scan/content.html">Looking Up A Data Source Row From a Barcode Scan</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Repeatedly%20Scanning%20Barcodes%20_%20QR%20Codes/content.html">Repeatedly Scanning Barcodes _ QR Codes</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Saving%20Entry%20Values%20For%20Reuse%20_%20Defaulting%20(Global%20Values)/content.html">Saving Entry Values For Reuse _ Defaulting (Global Values)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Showing%20and%20Hiding%20Fields%20(Visibility)/content.html">Showing and Hiding Fields (Visibility)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Validating%20Answers%20(Custom%20Validation)/content.html">Validating Answers (Custom Validation)</a></li>
+                            <li><a href="#" data-content="Platform/Form Recipes/Workflow%20A%20Form%20Entry%20Between%20Users%20(Process%20Steps)/content.html">Workflow A Form Entry Between Users (Process Steps)</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Data%20Captured%20from%20Forms/content.html">Data Captured from Forms</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Anonymizing%20and%20Excluding%20Data/content.html">Anonymizing and Excluding Data</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Date%20and%20Time%20values%20in%20Form%20entries/content.html">Date and Time values in Form entries</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Editing%20Form%20Entries/content.html">Editing Form Entries</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/FAQ%20-%20Data%20captured%20from%20Forms/content.html">FAQ - Data captured from Forms</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Manually%20Downloading%20Data/content.html">Manually Downloading Data</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Viewing%20Form%20Entries%20as%20a%20Feed/content.html">Viewing Form Entries as a Feed</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Viewing%20Form%20Entries%20in%20a%20Table/content.html">Viewing Form Entries in a Table</a></li>
+                            <li><a href="#" data-content="Platform/Data%20Captured%20from%20Forms/Viewing%20Form%20Entries%20on%20a%20Map/content.html">Viewing Form Entries on a Map</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/content.html">Outputting Data with Templates</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/App%20Printing/content.html">App Printing</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Built-in%20Data/content.html">Built-in Data</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Built-In%20Templates/content.html">Built-In Templates</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Charts%20in%20Templates/content.html">Charts in Templates</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Dynamic%20Output%20using%20Form%20Formulae/content.html">Dynamic Output using Form Formulae</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Excel%20Templates/content.html">Excel Templates</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Hiding%20Rows%20_%20Sections%20of%20Your%20Template/content.html">Hiding Rows _ Sections of Your Template</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Image%20Sizing/content.html">Image Sizing</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Inject%20Attached%20PDFs%20into%20Template%20Outputs/content.html">Inject Attached PDFs into Template Outputs</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Outputting%20Checkboxes,%20Hyperlinks%20and%20Other%20Special%20Characters%20(Unicode%20support)/content.html">Outputting Checkboxes, Hyperlinks and Other Special Characters (Unicode support)</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/PDF%20Output%20Tips%20and%20Tricks/content.html">PDF Output Tips and Tricks</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Repeating%20Data/content.html">Repeating Data</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Supported%20Fonts%20and%20Non-Western%20characters%20in%20Templates/content.html">Supported Fonts and Non-Western characters in Templates</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Troubleshooting%20%26%20FAQs/content.html">Troubleshooting & FAQs</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Using%20Word_Excel%20Comments%20To%20Preserve%20Template%20Formatting/content.html">Using Word_Excel Comments To Preserve Template Formatting</a></li>
+                            <li><a href="#" data-content="Platform/Outputting%20Data%20with%20Templates/Word%20Templates/content.html">Word Templates</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Tasks (Job Dispatch)/content.html">Tasks (Job Dispatch)</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Tasks (Job Dispatch)/Overview Tasks/content.html">Overview Tasks</a></li>
+                            <li><a href="#" data-content="Platform/Tasks (Job Dispatch)/_Adding a New Task/content.html">Adding a New Task</a></li>
+                            <li><a href="#" data-content="Platform/Tasks (Job Dispatch)/Task Templates/content.html">Task Templates</a></li>
+                            <li><a href="#" data-content="Platform/Tasks (Job Dispatch)/Recurring Tasks Creation Behaviour/content.html">Recurring Tasks Creation Behaviour</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Task Connectors/content.html">Task Connectors</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Task Connectors/Setting up Task Connectors/content.html">Setting up Task Connectors</a></li>
+                            <li><a href="#" data-content="Platform/Task Connectors/Google BigQuery Connector - Task Connectors/content.html">Google BigQuery Connector</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Data Sources/content.html">Data Sources</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Data Sources/Adding a New Data Source/content.html">Adding a New Data Source</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Editing Data Source Rows/content.html">Editing Data Source Rows</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Configuring Data Source Settings/content.html">Configuring Data Source Settings</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Using Image Columns/content.html">Using Image Columns</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Advanced Column Settings - Conditional Display Rules/content.html">Advanced Column Settings</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Viewing a Data Source on a Map/content.html">Viewing on a Map</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Creating, Updating and Deleting Rows in a Data Source/content.html">Creating, Updating and Deleting Rows</a></li>
+                            <li><a href="#" data-content="Platform/Data Sources/Dynamic Form Data Sources/content.html">Dynamic Form Data Sources</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Data Source Connectors/content.html">Data Source Connectors</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Google Spreadsheet - Data Source Connectors/content.html">Google Spreadsheet</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/SQL Server/content.html">SQL Server</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Platform Sync previously Hosted GET/content.html">Platform Sync</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Dropbox/content.html">Dropbox</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Amazon S3/content.html">Amazon S3</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/FTP/content.html">FTP</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/GeoOp - Data Source Connectors/content.html">GeoOp</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Box/content.html">Box</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Google BigQuery Connector/content.html">Google BigQuery</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Salesforce/content.html">Salesforce</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/REST Data Source Connector/content.html">REST</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/NetSuite/content.html">NetSuite</a></li>
+                            <li><a href="#" data-content="Platform/Data Source Connectors/Snowflake Connector/content.html">Snowflake</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Docs/content.html">Docs</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Docs/Overview/content.html">Overview</a></li>
+                            <li><a href="#" data-content="Platform/Docs/Adding a New Doc/content.html">Adding a New Doc</a></li>
+                            <li><a href="#" data-content="Platform/Docs/Editing Doc Details/content.html">Editing Doc Details</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Folders/content.html">Folders</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Folders/Folders Overview/content.html">Folders Overview</a></li>
+                            <li><a href="#" data-content="Platform/Folders/Adding a New Folder/content.html">Adding a New Folder</a></li>
+                            <li><a href="#" data-content="Platform/Folders/Adding a Screen Doc Data Source to a Folder/content.html">Adding a Screen/Doc/Data Source</a></li>
+                            <li><a href="#" data-content="Platform/Folders/Editing Folder Settings User Access Permissions/content.html">Editing Folder Settings</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Organization & Users/content.html">Organization & Users</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Organization & Users/Organization Setup/content.html">Organization Setup</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/Adding a New User/content.html">Adding a New User</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/Managing Users/content.html">Managing Users</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/Users - Frequently Asked Questions/content.html">Users FAQ</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/Deleting and Restoring with Trash/content.html">Deleting and Restoring</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/Two-Factor Authentication 2FA/content.html">Two-Factor Authentication</a></li>
+                            <li><a href="#" data-content="Platform/Organization & Users/REST External User Authentication Connector/content.html">REST External Auth</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/content.html">Go Beyond Forms</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Showing Data Source Rows on a Map Mapping Screens/content.html">Showing Data Source Rows on a Map</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Displaying Updating Data Rows From To An External System/content.html">Displaying & Updating Data Rows</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Launching Your App From A URL App Links Deep Linking/content.html">Launching Your App From A URL</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Advanced Column Settings for Data Sources/content.html">Advanced Column Settings</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/User Defined Filters on Enquiry Screens/content.html">User Defined Filters</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Custom Icons/content.html">Custom Icons</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Replacing Emulating Default App Screens/content.html">Replacing Default App Screens</a></li>
+                            <li><a href="#" data-content="Platform/Go Beyond Forms - Advanced App Building/Chain Screen Types to Produce Deeper User Experiences/content.html">Chain Screen Types</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/content.html">Connecting to Other Systems</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding Data Connections/content.html">Adding Data Connections</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a SQL Connection/content.html">Adding a SQL Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding an Amazon S3 Connection/content.html">Adding an Amazon S3 Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a Google Cloud Platform Connection/content.html">Adding a Google Cloud Platform Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a SharePoint Connection/content.html">Adding a SharePoint Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a Salesforce Connection/content.html">Adding a Salesforce Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Getting started with Google BigQuery/content.html">Getting started with Google BigQuery</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Troubleshooting Connection Issues/content.html">Troubleshooting Connection Issues</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/FTP Connection/content.html">FTP Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a NetSuite Connection/content.html">Adding a NetSuite Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a Power BI Connection/content.html">Adding a Power BI Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a Snowflake Connection/content.html">Adding a Snowflake Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding an MS Graph Connection/content.html">Adding an MS Graph Connection</a></li>
+                            <li><a href="#" data-content="Platform/Connecting to Other Systems (Integrations)/Adding a Twilio Connection/content.html">Adding a Twilio Connection</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Enterprise Toolkit/content.html">Enterprise Toolkit</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Enterprise Toolkit/Creating New Environments/content.html">Creating New Environments</a></li>
+                            <li><a href="#" data-content="Platform/Enterprise Toolkit/Copying Content Between Environments via the Repository/content.html">Copying Content Between Environments</a></li>
+                            <li><a href="#" data-content="Platform/Enterprise Toolkit/Provisioning Users and Single Sign On with Okta/content.html">Provisioning Users with Okta</a></li>
+                            <li><a href="#" data-content="Platform/Enterprise Toolkit/Provisioning Users and Single Sign On with Azure Active Directory/content.html">Provisioning Users with Azure AD</a></li>
+                            <li><a href="#" data-content="Platform/Enterprise Toolkit/Single Sign On with Ping Identity/content.html">Single Sign On with Ping Identity</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-children">
+                        <a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/content.html">Sync & Replication</a>
+                        <ul class="sub-list">
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Introducing Sync/content.html">Introducing Sync</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Push Form Entry Data to Your Sync Database/content.html">Push Form Entry Data</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Exposing Tables from your Sync Database as Data Sources/content.html">Exposing Tables as Data Sources</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Filtering Rows By Timestamp Incremental Row Updates/content.html">Filtering Rows By Timestamp</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Filtering Rows by User/content.html">Filtering Rows by User</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Running Sync in Microsoft's Azure cloud hosting/content.html">Running Sync in Azure</a></li>
+                            <li><a href="#" data-content="Platform/Sync Replication of Data to Your Own Server/Sync Frequently Asked Questions/content.html">Sync FAQ</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h2>Integration API V2</h2>
+                <ul class="nav-list">
+                    <li><a href="#" data-content="Integration API V2/API Overview/content.html">API Overview</a></li>
+                    <li><a href="#" data-content="Integration API V2/Company API/content.html">Company API</a></li>
+                    <li><a href="#" data-content="Integration API V2/Data Source API/content.html">Data Source API</a></li>
+                    <li><a href="#" data-content="Integration API V2/Tasks API/content.html">Tasks API</a></li>
+                    <li><a href="#" data-content="Integration API V2/User API/content.html">User API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="breadcrumbs"></div>
+        <iframe id="contentFrame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Handle navigation clicks
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-list a').forEach(a => {
+                    a.classList.remove('active-link');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active-link');
+                
+                // Load content in iframe
+                const contentPath = this.getAttribute('data-content');
+                const iframe = document.getElementById('contentFrame');
+                iframe.src = contentPath;
+
+                // Breadcrumbs logic
+                const breadcrumbsDiv = document.querySelector('.breadcrumbs');
+                let path = this.getAttribute('data-content');
+                let parts = path.replace(/\\/g, '/').split('/');
+                // Remove trailing 'content.html' if present
+                if (parts[parts.length-1] === 'content.html') parts.pop();
+                // Capitalize and decode for display
+                let crumbs = [];
+                let runningPath = '';
+                for (let i = 0; i < parts.length; i++) {
+                    if (i > 0) runningPath += '/';
+                    runningPath += parts[i];
+                    let display = decodeURIComponent(parts[i]).replace(/%20/g, ' ');
+                    if (display === 'Platform' || display === 'Integration API V2') {
+                        crumbs.push(`<span>${display}</span>`);
+                    } else {
+                        crumbs.push(`<a href="#" data-content="${runningPath}/content.html">${display}</a>`);
+                    }
+                }
+                breadcrumbsDiv.innerHTML = crumbs.join(' <span style="color:#aaa">&gt;</span> ');
+                // Breadcrumb click handler
+                breadcrumbsDiv.querySelectorAll('a').forEach(bc => {
+                    bc.onclick = function(ev) {
+                        ev.preventDefault();
+                        const target = document.querySelector(`a[data-content='${this.getAttribute('data-content')}']`);
+                        if (target) target.click();
+                    };
+                });
+
+                // Apply styles to the loaded content
+                iframe.onload = function() {
+                    try {
+                        const doc = iframe.contentDocument || iframe.contentWindow.document;
+                        // Add font links FIRST
+                        const fontLink = doc.createElement('link');
+                        fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap';
+                        fontLink.rel = 'stylesheet';
+                        doc.head.appendChild(fontLink);
+                        // Create and inject styles
+                        const style = doc.createElement('style');
+                        style.textContent = `
+                            body {
+                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                font-size: 1.05rem;
+                                line-height: 1.75;
+                                color: #23272f;
+                                background: #fff;
+                                padding: 2.5rem 2rem 2rem 2rem;
+                                max-width: 1200px;
+                                margin: 0 auto;
+                            }
+                            h1, h2, h3, h4, h5, h6 {
+                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                font-weight: 600;
+                                color: #2c3e50;
+                                margin: 1.5em 0 0.5em;
+                                line-height: 1.3;
+                            }
+                            h1 { font-size: 2.1em; }
+                            h2 { font-size: 1.7em; }
+                            h3 { font-size: 1.35em; }
+                            h4 { font-size: 1.15em; }
+                            p {
+                                margin-bottom: 1.2em;
+                                font-size: 1.08em;
+                            }
+                            a {
+                                color: #3498db;
+                                text-decoration: none;
+                                transition: color 0.2s;
+                            }
+                            a:hover {
+                                color: #217dbb;
+                                text-decoration: underline;
+                            }
+                            code, pre {
+                                font-family: 'Source Code Pro', 'Consolas', monospace;
+                                background: #f5f7fa;
+                                padding: 0.2em 0.4em;
+                                border-radius: 3px;
+                                font-size: 0.97em;
+                            }
+                            pre {
+                                padding: 1em;
+                                overflow-x: auto;
+                                border-radius: 5px;
+                                margin: 1.5em 0;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 1.5em 0;
+                            }
+                            th, td {
+                                padding: 0.75em;
+                                border: 1px solid #e0e0e0;
+                            }
+                            th {
+                                background: #f5f7fa;
+                                font-weight: 600;
+                            }
+                            img {
+                                max-width: 100%;
+                                height: auto;
+                                border-radius: 5px;
+                                margin: 1.5em 0;
+                            }
+                            blockquote {
+                                border-left: 4px solid #3498db;
+                                padding-left: 1em;
+                                margin: 1.5em 0;
+                                color: #666;
+                            }
+                            ul, ol {
+                                margin: 1.5em 0;
+                                padding-left: 2em;
+                            }
+                            li {
+                                margin-bottom: 0.5em;
+                            }
+                        `;
+                        doc.head.appendChild(style);
+                    } catch (e) {
+                        console.error('Error applying styles:', e);
+                    }
+                };
+                
+                // If this is a parent link, toggle the submenu
+                if (this.parentElement.classList.contains('has-children')) {
+                    this.parentElement.classList.toggle('active');
+                }
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-box').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const links = document.querySelectorAll('.nav-list a');
+            
+            links.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    link.style.display = 'block';
+                    // Show parent lists if a child matches
+                    let parent = link.parentElement;
+                    while (parent && parent.classList.contains('sub-list')) {
+                        parent.style.display = 'block';
+                        parent = parent.parentElement;
+                        if (parent && parent.classList.contains('has-children')) {
+                            parent.classList.add('active');
+                        }
+                    }
+                } else {
+                    link.style.display = 'none';
+                }
+            });
+        });
+
+        // Load initial content
+        document.querySelector('.nav-list a').click();
+    </script>
+</body>
+</html> 

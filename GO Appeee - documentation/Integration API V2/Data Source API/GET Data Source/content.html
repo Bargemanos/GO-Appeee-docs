@@ -1,0 +1,65 @@
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" loading="lazy" src="../../../../assets/Integration API V2/Data Source API/GET Data Source/image-20221112-191620.png" data-image-src="https://goconnectitgroup.atlassian.net/wiki/download/attachments/26522787284/image-20221112-191620.png?version=1&amp;modificationDate=1689148825046&amp;cacheVersion=1&amp;api=v2" data-height="45" data-width="1080" data-unresolved-comment-count="0" data-linked-resource-id="26522787304" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image-20221112-191620.png" data-base-url="https://goconnectitgroup.atlassian.net/wiki" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26522787284" data-linked-resource-container-version="1" data-media-id="a30e526f-ecc6-4f8f-96ba-047d3a07507d" data-media-type="file"></span><p>This request method allows you to retrieve a Data Source from the platform. </p><p>On the Cloud, this API is available via SSL-secured HTTPS connection using the REST GET verb.<br/>The <strong>format </strong>query string parameter controls the desired response format.  Specify either XML or JSON.</p><p>/api/v2/datasource?<strong>format=xml/json</strong></p><p><strong>ADDITIONAL INFO</strong></p><ul><li><p><a href="https://support.appenate.com/en/support/solutions/articles/1000165066" class="external-link" rel="nofollow">API Explorer</a></p></li><li><p><a href="https://support.appenate.com/en/support/solutions/articles/1000157085" class="external-link" rel="nofollow">General Info &amp; Status Codes</a></p></li></ul><p><strong>CONTENTS</strong></p><div class="toc-macro client-side-toc-macro  conf-macro output-block" data-headerelements="H1,H2,H3,H4,H5,H6,H7" data-hasbody="false" data-macro-name="toc" data-macro-id="9d553ee2-4040-417a-9e99-f59c77f05fab" data-layout="default" data-local-id="9968356f-2444-4e37-ac94-b716d4756190"> </div><hr/><h1 id="GETDataSource-Endpoints&amp;APIExplorer">Endpoints &amp; API Explorer</h1><div class="table-wrap"><table data-layout="default" data-local-id="fe25062b-1b7f-4c9e-a782-19a04068a7ba" class="confluenceTable"><colgroup><col style="width: 226.67px;"/><col style="width: 226.67px;"/></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Endpoint</strong></p></th><th class="confluenceTh"><p><strong>API Explorer</strong></p></th></tr><tr><td class="confluenceTd"><p><a href="https://web.appeee.nl:443/api/v2/datasource" class="external-link" rel="nofollow">https://web.appeee.nl:443/api/v2/datasource</a></p></td><td class="confluenceTd"><p><a href="https://web.appeee.nl/apiexplorer#!/datasource/getv2datasource" class="external-link" rel="nofollow">Model Description/Schema &amp; Parameters</a></p></td></tr></tbody></table></div><hr/><h1 id="GETDataSource-Parameters">Parameters</h1><p>The GET verb allows you to retrieve a single DataSource, identified by its unique Id.<br/>The required and optional parameters for a GET call to the DataSource API are outlined below.</p><div class="table-wrap"><table data-layout="default" data-local-id="939220a7-2cb7-4f73-8e38-5141bb2d420e" class="confluenceTable"><colgroup><col style="width: 170.0px;"/><col style="width: 170.0px;"/><col style="width: 170.0px;"/><col style="width: 170.0px;"/></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Name</strong></p></th><th class="confluenceTh"><p><strong>Type</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th><th class="confluenceTh"><p><strong>Required</strong></p></th></tr><tr><td class="confluenceTd"><p>CompanyId</p></td><td class="confluenceTd"><p>Integer</p></td><td class="confluenceTd"><p>Your unique Company Id found on the Organisation Setup page of the secure website</p></td><td class="confluenceTd"><p>✓</p></td></tr><tr><td class="confluenceTd"><p>IntegrationKey</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>Your unique Integration Key found on the Organisation Setup page of the secure website</p></td><td class="confluenceTd"><p>✓</p></td></tr><tr><td class="confluenceTd"><p>Name</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>The data source name to search for</p></td><td class="confluenceTd"><p /></td></tr><tr><td class="confluenceTd"><p>Id or ExternalId</p></td><td class="confluenceTd"><p>GUID or String</p></td><td class="confluenceTd"><p>The unique identifier of the DataSource you wish to retrieve<br/>The external identifier for the DataSource to retrieve</p></td><td class="confluenceTd"><p>✓</p></td></tr><tr><td class="confluenceTd"><p>ReturnRows</p></td><td class="confluenceTd"><p>Boolean</p></td><td class="confluenceTd"><p>Whether or not to return the Rows for this Data Source in the response.<br/>Defaults to False.<br/>If set to True, then will return Rows in a paginated form, using the PageSize and PageNo values below</p></td><td class="confluenceTd"><p /></td></tr><tr><td class="confluenceTd"><p>PageNo</p></td><td class="confluenceTd"><p>Integer</p></td><td class="confluenceTd"><p>The number of Rows returned per page.<br/>Maximum value of 100.<br/>Defaults to 100.</p></td><td class="confluenceTd"><p /></td></tr><tr><td class="confluenceTd"><p>PageSize</p></td><td class="confluenceTd"><p>Integer</p></td><td class="confluenceTd"><p>The page number of the Rows result set that you wish to receive back.<br/>Defaults to 0, which is the first page of the Rows result set.</p></td><td class="confluenceTd"><p /></td></tr></tbody></table></div><hr/><h1 id="GETDataSource-Example">Example</h1><p><strong>Request URL </strong>     </p><div class="code panel pdl conf-macro output-block" style="border-width: 1px;" data-hasbody="true" data-macro-name="code" data-macro-id="a31197a3-2d16-4e43-a281-e0721180eb85"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">https://secure.appenate.com:443/api/v2/datasource?Id=1f12e179-2393-4f19-a03b-a96e00XXXXXX&amp;CompanyId=51XXX&amp;IntegrationKey=78eec3032af240fdb642218afbXXXXXX&amp;ReturnRows=true&amp;&amp;</pre>
+</div></div><p><strong>Response Body </strong></p><div class="code panel pdl conf-macro output-block" style="border-width: 1px;" data-hasbody="true" data-macro-name="code" data-macro-id="65f8ddc6-c0c2-40bc-9064-66cab95a51f4"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+  &quot;DataSource&quot;: {
+    &quot;Id&quot;: &quot;1f12e17923934f19a03ba96e00XXXXXX&quot;,
+    &quot;Name&quot;: &quot;Assess Data&quot;,
+    &quot;ExternalId&quot;: &quot;AssessData&quot;,
+    &quot;Headers&quot;: [
+      {
+        &quot;Name&quot;: &quot;ACN&quot;,
+        &quot;DisplayAt&quot;: &quot;None&quot;
+      },
+      {
+        &quot;Name&quot;: &quot;AssessNo&quot;,
+        &quot;DisplayAt&quot;: &quot;Title&quot;
+      },
+      {
+        &quot;Name&quot;: &quot;AssessDate&quot;,
+        &quot;DisplayAt&quot;: &quot;None&quot;
+      }
+    ],
+    &quot;Rows&quot;: [
+      [
+        &quot;ACN 000 000 019&quot;,
+        &quot;1001&quot;,
+        null
+      ],
+      [
+        &quot;ACN 000 000 020&quot;,
+        &quot;1002&quot;,
+        &quot;2018-10-03&quot;
+      ],
+      [
+        &quot;ACN 000 000 021&quot;,
+        &quot;1003&quot;,
+        null
+      ],
+      [
+        &quot;ACN 000 000 022&quot;,
+        &quot;1004&quot;,
+        null
+      ],
+      [
+        &quot;e5b4ac5d-4aee-4d63-8719-a96e011079b9&quot;,
+        &quot;1005&quot;,
+        &quot;2018-10-04&quot;
+      ],
+      [
+        &quot;ACN 333 222 111&quot;,
+        &quot;1008&quot;,
+        &quot;2018-10-04&quot;
+      ],
+      [
+        &quot;ACN 222 111 333&quot;,
+        &quot;1007&quot;,
+        &quot;2018-10-04&quot;
+      ]
+    ],
+    &quot;TotalRows&quot;: 7,
+    &quot;LastUpdated&quot;: &quot;2022-06-20T13:27:11.4270000Z&quot;,
+    &quot;CompanyId&quot;: 51XXX
+  }
+}</pre>
+</div></div><p />
