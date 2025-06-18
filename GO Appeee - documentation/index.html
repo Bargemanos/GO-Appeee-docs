@@ -7,12 +7,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Light mode (default) */
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
             --text-color: #333;
             --background-color: #f5f6fa;
+            --sidebar-bg: white;
+            --sidebar-border: rgba(0,0,0,0.1);
+            --nav-hover-bg: #f0f0f0;
+            --nav-hover-color: var(--secondary-color);
+            --nav-active-bg: var(--secondary-color);
+            --nav-active-color: white;
+            --subnav-border: #e0e0e0;
+            --subnav-active-bg: #e3f2fd;
+            --subnav-active-color: var(--secondary-color);
+            --search-bg: #e3f2fd;
+            --search-border: var(--secondary-color);
+            --search-placeholder: #3498db;
+            --content-bg: white;
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --font-code: 'Source Code Pro', monospace;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #1a2639;
+            --secondary-color: #2980b9;
+            --text-color: #e0e0e0;
+            --background-color: #121212;
+            --sidebar-bg: #1e1e1e;
+            --sidebar-border: rgba(255,255,255,0.1);
+            --nav-hover-bg: #2d2d2d;
+            --nav-hover-color: #3498db;
+            --nav-active-bg: #2980b9;
+            --nav-active-color: #f0f0f0;
+            --subnav-border: #333;
+            --subnav-active-bg: #2d2d2d;
+            --subnav-active-color: #3498db;
+            --search-bg: #2d2d2d;
+            --search-border: #3498db;
+            --search-placeholder: #5dade2;
+            --content-bg: #1e1e1e;
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: var(--sidebar-bg);
+            box-shadow: 0 2px 5px var(--sidebar-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle-icon {
+            font-size: 1.2rem;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         * {
@@ -30,17 +91,18 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .sidebar {
             width: 360px;
-            background: white;
+            background: var(--sidebar-bg);
             padding: 0;
             height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 5px var(--sidebar-border);
             display: flex;
             flex-direction: column;
         }
@@ -48,10 +110,37 @@
         .sidebar-header {
             position: sticky;
             top: 0;
-            background: white;
+            background: var(--sidebar-bg);
             z-index: 2;
             padding: 20px 20px 10px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 8px var(--sidebar-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--nav-hover-bg);
+        }
+        
+        .theme-toggle-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
         }
 
         .sidebar-header h1 {
@@ -72,7 +161,7 @@
             flex: 1;
             margin-left: 360px;
             height: 100vh;
-            background-color: #f8f9fa;
+            background-color: var(--background-color);
             position: relative;
             overflow: hidden;
         }
@@ -92,8 +181,8 @@
             width: 100%;
             height: 100%;
             border: none;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            background-color: var(--content-bg);
+            box-shadow: 0 0 20px var(--sidebar-border);
             border-radius: 8px;
             margin: 20px;
             position: relative;
@@ -134,45 +223,45 @@
             margin: 1rem 0;
             padding: 0.8rem 1rem;
             width: 100%;
-            border: 2px solid var(--secondary-color);
+            border: 2px solid var(--search-border);
             border-radius: 8px;
-            background-color: #e3f2fd;
-            color: var(--primary-color);
+            background-color: var(--search-bg);
+            color: var(--text-color);
             font-size: 1rem;
             transition: all 0.3s ease;
             position: relative;
             z-index: 2;
             font-family: var(--font-main);
             font-weight: 400;
-            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+            box-shadow: 0 2px 8px var(--sidebar-border);
         }
 
         .search-box::placeholder {
-            color: #3498db;
+            color: var(--search-placeholder);
             opacity: 0.7;
         }
 
         .search-box:focus {
             outline: none;
-            border-color: #217dbb;
-            background-color: #eaf6fb;
-            box-shadow: 0 0 10px rgba(52, 152, 219, 0.15);
+            border-color: var(--secondary-color);
+            background-color: var(--content-bg);
+            box-shadow: 0 0 10px var(--sidebar-border);
         }
 
         .nav-section {
             margin-bottom: 2rem;
-            background: white;
+            background: var(--sidebar-bg);
             border-radius: 8px;
             padding: 1rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px var(--sidebar-border);
         }
 
         .nav-section h2 {
-            color: var(--primary-color);
+            color: var(--text-color);
             font-size: 1.2rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid var(--nav-hover-bg);
             font-weight: 600;
             letter-spacing: -0.01em;
         }
@@ -208,7 +297,7 @@
             margin-top: 0.5rem;
             display: none;
             padding-left: 0.5rem;
-            border-left: 2px solid #e0e0e0;
+            border-left: 2px solid var(--subnav-border);
         }
 
         .sub-list li {
@@ -217,7 +306,7 @@
         }
 
         .sub-list a {
-            color: #555;
+            color: var(--text-color);
             font-size: 0.9em;
             padding: 0.4rem 0.8rem;
             display: block;
@@ -227,8 +316,8 @@
         }
 
         .sub-list a:hover {
-            background-color: #f0f0f0;
-            color: var(--secondary-color);
+            background-color: var(--nav-hover-bg);
+            color: var(--nav-hover-color);
             transform: translateX(5px);
         }
 
@@ -329,8 +418,13 @@
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
-            <h1>GO Appeee Documentation</h1>
-            <input type="text" class="search-box" placeholder="Search documentation...">
+            <div>
+                <h1>GO Appeee Documentation</h1>
+                <input type="text" class="search-box" placeholder="Search documentation...">
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-icon">🌓</span>
+            </div>
         </div>
         <div class="sidebar-menu-scroll">
             <div class="nav-section">
@@ -832,6 +926,119 @@
 
         // Load initial content
         document.querySelector('.nav-list a').click();
+    </script>
+
+    <script>
+        // Dark mode toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or respect OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply theme based on saved preference or OS preference
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                htmlElement.setAttribute('data-theme', 'dark');
+                updateIframeTheme('dark');
+            }
+            
+            // Toggle theme when button is clicked
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.getAttribute('data-theme') === 'dark') {
+                    htmlElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    updateIframeTheme('light');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    updateIframeTheme('dark');
+                }
+            });
+            
+            // Function to update iframe theme
+            function updateIframeTheme(theme) {
+                const iframe = document.getElementById('contentFrame');
+                if (iframe && iframe.contentDocument) {
+                    try {
+                        const iframeHtml = iframe.contentDocument.documentElement;
+                        if (theme === 'dark') {
+                            iframeHtml.setAttribute('data-theme', 'dark');
+                        } else {
+                            iframeHtml.removeAttribute('data-theme');
+                        }
+                    } catch (e) {
+                        console.error('Could not access iframe content:', e);
+                    }
+                }
+            }
+            
+            // Update iframe theme when it loads
+            document.getElementById('contentFrame').addEventListener('load', function() {
+                const currentTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+                updateIframeTheme(currentTheme);
+                
+                // Add CSS to iframe
+                try {
+                    const doc = this.contentDocument || this.contentWindow.document;
+                    const style = doc.createElement('style');
+                    style.textContent = `
+                        :root {
+                            --primary-color: #2c3e50;
+                            --secondary-color: #3498db;
+                            --text-color: #333;
+                            --background-color: #f5f6fa;
+                            --content-bg: white;
+                            --link-color: #3498db;
+                            --code-bg: #f5f5f5;
+                            --border-color: #ddd;
+                            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            --font-code: 'Source Code Pro', monospace;
+                        }
+                        
+                        [data-theme="dark"] {
+                            --primary-color: #1a2639;
+                            --secondary-color: #2980b9;
+                            --text-color: #e0e0e0;
+                            --background-color: #121212;
+                            --content-bg: #1e1e1e;
+                            --link-color: #5dade2;
+                            --code-bg: #2d2d2d;
+                            --border-color: #444;
+                            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            --font-code: 'Source Code Pro', monospace;
+                        }
+                        
+                        body {
+                            color: var(--text-color);
+                            background-color: var(--content-bg);
+                            font-family: var(--font-main);
+                        }
+                        
+                        a {
+                            color: var(--link-color);
+                        }
+                        
+                        pre, code {
+                            background-color: var(--code-bg);
+                            border-color: var(--border-color);
+                        }
+                        
+                        table {
+                            border-color: var(--border-color);
+                        }
+                        
+                        th, td {
+                            border-color: var(--border-color);
+                        }
+                    `;
+                    doc.head.appendChild(style);
+                } catch (e) {
+                    console.error('Could not inject styles into iframe:', e);
+                }
+            });
+        });
     </script>
 </body>
 </html> 
