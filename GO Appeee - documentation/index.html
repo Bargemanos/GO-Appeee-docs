@@ -898,9 +898,57 @@
     </div>
 
     <script>
-        // Handle navigation clicks
+        // Add click handlers for parent menu items
+        document.querySelectorAll('.has-children > a').forEach(parentLink => {
+            parentLink.addEventListener('click', function(e) {
+                // If this is a direct click on a parent menu item (not a child item click bubbling up)
+                if (e.target === this || e.target.parentNode === this) {
+                    e.preventDefault();
+                    
+                    const parentLi = this.parentElement;
+                    
+                    // Toggle active state for this parent
+                    if (parentLi.classList.contains('active')) {
+                        parentLi.classList.remove('active');
+                    } else {
+                        // Close other top-level items at the same level
+                        const siblingItems = Array.from(parentLi.parentElement.children)
+                            .filter(item => item !== parentLi && item.classList.contains('has-children'));
+                        
+                        siblingItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        // Open this item
+                        parentLi.classList.add('active');
+                    }
+                    
+                    // Load content in iframe
+                    const contentPath = this.getAttribute('data-content');
+                    if (contentPath) {
+                        const iframe = document.getElementById('contentFrame');
+                        iframe.src = contentPath;
+                        
+                        // Update active link status
+                        document.querySelectorAll('.nav-list a').forEach(a => {
+                            a.classList.remove('active-link');
+                        });
+                        this.classList.add('active-link');
+                    }
+                }
+            });
+        });
+        
+        // Handle navigation clicks for all links
         document.querySelectorAll('.nav-list a').forEach(link => {
             link.addEventListener('click', function(e) {
+                // Skip if this is a parent menu item (handled by the code above)
+                if (this.parentElement.classList.contains('has-children') && 
+                    this.parentElement.querySelector('.sub-list') && 
+                    this === this.parentElement.querySelector('a')) {
+                    return;
+                }
+                
                 e.preventDefault();
                 
                 // Remove active class from all links
@@ -911,18 +959,13 @@
                 // Add active class to clicked link
                 this.classList.add('active-link');
                 
-                // Collapse all menu items first
-                document.querySelectorAll('.has-children').forEach(item => {
-                    item.classList.remove('active');
-                });
-                
                 // Expand parent menu items of the clicked link
                 let parentLi = this.closest('li');
                 while (parentLi) {
                     if (parentLi.classList.contains('has-children')) {
                         parentLi.classList.add('active');
                     }
-                    parentLi = parentLi.parentElement.closest('li');
+                    parentLi = parentLi.parentElement ? parentLi.parentElement.closest('li') : null;
                 }
                 
                 // Load content in iframe
@@ -1526,6 +1569,321 @@
                     doc.head.appendChild(style);
                 } catch (e) {
                     console.error('Could not inject styles into iframe:', e);
+                }
+            });
+            
+            // Enhanced Search Functionality
+            const searchBox = document.querySelector('.search-box');
+            const searchHistory = document.querySelector('.search-history');
+            const searchResults = document.querySelector('.search-results');
+            
+            // Style the search results container
+            searchResults.style.backgroundColor = 'var(--sidebar-bg)';
+            searchResults.style.border = '1px solid var(--sidebar-border)';
+            searchResults.style.borderRadius = '4px';
+            searchResults.style.maxHeight = '300px';
+            searchResults.style.overflowY = 'auto';
+            searchResults.style.position = 'absolute';
+            searchResults.style.top = '100%';
+            searchResults.style.left = '0';
+            searchResults.style.right = '0';
+            searchResults.style.zIndex = '100';
+            searchResults.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            searchResults.style.display = 'none';
+            
+            // Cache for content search
+            const contentCache = {};
+            
+            // Load search history from localStorage
+            let searchHistoryItems = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+            
+            // Function to update search history display
+            function updateSearchHistoryDisplay() {
+                searchHistory.innerHTML = '';
+                
+                if (searchHistoryItems.length === 0) {
+                    searchHistory.style.display = 'none';
+                    return;
+                }
+                
+                searchHistoryItems.slice(0, 5).forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'search-history-item';
+                    historyItem.style.padding = '8px 12px';
+                    historyItem.style.borderBottom = '1px solid var(--sidebar-border)';
+                    historyItem.style.cursor = 'pointer';
+                    historyItem.style.display = 'flex';
+                    historyItem.style.justifyContent = 'space-between';
+                    historyItem.style.alignItems = 'center';
+                    
+                    historyItem.innerHTML = `
+                        <div class="search-history-text">${item}</div>
+                        <div class="search-history-remove" data-term="${item}" style="color: var(--text-color); opacity: 0.5; font-size: 0.8rem; padding: 2px 6px;">×</div>
+                    `;
+                    
+                    historyItem.querySelector('.search-history-text').addEventListener('click', () => {
+                        searchBox.value = item;
+                        searchHistory.style.display = 'none';
+                        performSearch(item);
+                    });
+                    
+                    historyItem.querySelector('.search-history-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const term = e.target.getAttribute('data-term');
+                        searchHistoryItems = searchHistoryItems.filter(i => i !== term);
+                        localStorage.setItem('searchHistory', JSON.stringify(searchHistoryItems));
+                        updateSearchHistoryDisplay();
+                    });
+                    
+                    searchHistory.appendChild(historyItem);
+                });
+                
+                searchHistory.style.display = 'block';
+            }
+            
+            // Function to fetch and cache content
+            async function fetchContent(url) {
+                if (contentCache[url]) {
+                    return contentCache[url];
+                }
+                
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const text = await response.text();
+                    contentCache[url] = text;
+                    return text;
+                } catch (error) {
+                    console.error(`Error fetching ${url}:`, error);
+                    return '';
+                }
+            }
+            
+            // Function to extract text content from HTML
+            function extractTextFromHtml(html) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Remove script and style elements
+                const scripts = tempDiv.querySelectorAll('script, style');
+                scripts.forEach(script => script.remove());
+                
+                return tempDiv.textContent || tempDiv.innerText || '';
+            }
+            
+            // Function to get context around a match
+            function getContextAroundMatch(text, matchIndex, term, contextLength = 50) {
+                const start = Math.max(0, matchIndex - contextLength);
+                const end = Math.min(text.length, matchIndex + term.length + contextLength);
+                
+                let context = text.substring(start, end);
+                
+                // Add ellipsis if needed
+                if (start > 0) {
+                    context = '...' + context;
+                }
+                
+                if (end < text.length) {
+                    context = context + '...';
+                }
+                
+                // Highlight the match
+                const matchStart = matchIndex - start + (start > 0 ? 3 : 0); // Adjust for ellipsis
+                const matchEnd = matchStart + term.length;
+                
+                return context.substring(0, matchStart) + 
+                       '<span class="highlight" style="background-color: rgba(52, 152, 219, 0.2); padding: 0 2px; border-radius: 2px;">' + 
+                       context.substring(matchStart, matchEnd) + 
+                       '</span>' + 
+                       context.substring(matchEnd);
+            }
+            
+            // Function to search in content
+            async function searchInContent(term) {
+                if (!term || term.length < 2) return [];
+                
+                const results = [];
+                const links = document.querySelectorAll('.nav-list a[data-content]');
+                const searchTerm = term.toLowerCase();
+                
+                // First search in menu items
+                for (const link of links) {
+                    const title = link.textContent.trim();
+                    const url = link.getAttribute('data-content');
+                    
+                    if (title.toLowerCase().includes(searchTerm)) {
+                        results.push({
+                            title,
+                            url,
+                            context: 'Menu item',
+                            score: 100 // Higher score for menu matches
+                        });
+                    }
+                }
+                
+                // Then search in content
+                const contentSearchPromises = [];
+                
+                for (const link of links) {
+                    const title = link.textContent.trim();
+                    const url = link.getAttribute('data-content');
+                    
+                    contentSearchPromises.push((async () => {
+                        try {
+                            const content = await fetchContent(url);
+                            const text = extractTextFromHtml(content);
+                            const lowerText = text.toLowerCase();
+                            
+                            let index = lowerText.indexOf(searchTerm);
+                            if (index !== -1) {
+                                // Get context around the first match
+                                const context = getContextAroundMatch(text, index, searchTerm);
+                                
+                                // Count occurrences for relevance score
+                                let count = 0;
+                                let pos = lowerText.indexOf(searchTerm);
+                                while (pos !== -1) {
+                                    count++;
+                                    pos = lowerText.indexOf(searchTerm, pos + 1);
+                                }
+                                
+                                results.push({
+                                    title,
+                                    url,
+                                    context,
+                                    score: 50 + count // Base score + occurrence count
+                                });
+                            }
+                        } catch (error) {
+                            console.error(`Error searching in ${url}:`, error);
+                        }
+                    })());
+                }
+                
+                await Promise.all(contentSearchPromises);
+                
+                // Sort by score (descending)
+                return results.sort((a, b) => b.score - a.score);
+            }
+            
+            // Function to display search results
+            function displaySearchResults(results) {
+                searchResults.innerHTML = '';
+                
+                if (results.length === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.style.padding = '12px';
+                    noResults.style.textAlign = 'center';
+                    noResults.style.color = 'var(--text-color)';
+                    noResults.textContent = 'No results found';
+                    searchResults.appendChild(noResults);
+                } else {
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'search-result-item';
+                        resultItem.style.padding = '8px 12px';
+                        resultItem.style.borderBottom = '1px solid var(--sidebar-border)';
+                        resultItem.style.cursor = 'pointer';
+                        
+                        resultItem.innerHTML = `
+                            <div class="title" style="font-weight: 500; margin-bottom: 4px;">${result.title}</div>
+                            <div class="context" style="font-size: 0.85rem; opacity: 0.8;">${result.context}</div>
+                        `;
+                        
+                        resultItem.addEventListener('click', () => {
+                            // Navigate to the result
+                            const iframe = document.getElementById('contentFrame');
+                            iframe.src = result.url;
+                            
+                            // Find and activate the corresponding menu item
+                            const menuItem = document.querySelector(`.nav-list a[data-content="${result.url}"]`);
+                            if (menuItem) {
+                                // Remove active class from all links
+                                document.querySelectorAll('.nav-list a').forEach(a => {
+                                    a.classList.remove('active-link');
+                                });
+                                
+                                // Add active class to this link
+                                menuItem.classList.add('active-link');
+                                
+                                // Expand parent menu items
+                                let parentLi = menuItem.closest('li');
+                                while (parentLi) {
+                                    if (parentLi.classList.contains('has-children')) {
+                                        parentLi.classList.add('active');
+                                    }
+                                    parentLi = parentLi.parentElement ? parentLi.parentElement.closest('li') : null;
+                                }
+                            }
+                            
+                            // Hide search results
+                            searchResults.style.display = 'none';
+                        });
+                        
+                        searchResults.appendChild(resultItem);
+                    });
+                }
+                
+                searchResults.style.display = 'block';
+            }
+            
+            // Debounce function to limit how often a function is called
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+            
+            // Function to perform search
+            async function performSearch(term) {
+                if (!term || term.trim().length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                term = term.trim();
+                
+                // Add to search history if not already there
+                if (!searchHistoryItems.includes(term)) {
+                    searchHistoryItems.unshift(term);
+                    searchHistoryItems = searchHistoryItems.slice(0, 10); // Keep only 10 items
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryItems));
+                }
+                
+                const results = await searchInContent(term);
+                displaySearchResults(results);
+            }
+            
+            // Debounced search function
+            const debouncedSearch = debounce(performSearch, 300);
+            
+            // Search box event listeners
+            searchBox.addEventListener('input', (e) => {
+                const term = e.target.value.trim();
+                if (term.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                debouncedSearch(term);
+            });
+            
+            searchBox.addEventListener('focus', () => {
+                if (searchBox.value.trim().length === 0 && searchHistoryItems.length > 0) {
+                    updateSearchHistoryDisplay();
+                    searchHistory.style.display = 'block';
+                }
+            });
+            
+            // Close search results and history when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchBox.contains(e.target) && !searchResults.contains(e.target) && !searchHistory.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                    searchHistory.style.display = 'none';
                 }
             });
         });
