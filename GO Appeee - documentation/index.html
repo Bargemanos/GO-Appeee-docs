@@ -247,6 +247,120 @@
             background-color: var(--content-bg);
             box-shadow: 0 0 10px var(--sidebar-border);
         }
+        
+        /* Search Results Panel */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--sidebar-bg);
+            border: 1px solid var(--sidebar-border);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--sidebar-border);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background-color: var(--nav-hover-bg);
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        
+        .search-result-context {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .search-highlight {
+            background-color: rgba(52, 152, 219, 0.2);
+            padding: 0 2px;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-history {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--sidebar-bg);
+            border: 1px solid var(--sidebar-border);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-history.active {
+            display: block;
+        }
+        
+        .search-history-item {
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--sidebar-border);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .search-history-item:hover {
+            background-color: var(--nav-hover-bg);
+        }
+        
+        .search-history-text {
+            flex-grow: 1;
+        }
+        
+        .search-history-remove {
+            color: var(--text-color);
+            opacity: 0.5;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        
+        .search-history-remove:hover {
+            opacity: 1;
+        }
+        
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
 
         .nav-section {
             margin-bottom: 2rem;
@@ -420,7 +534,11 @@
         <div class="sidebar-header">
             <div>
                 <h1>GO Appeee Documentation</h1>
-                <input type="text" class="search-box" placeholder="Search documentation...">
+                <div class="search-container">
+                    <input type="text" class="search-box" placeholder="Search documentation...">
+                    <div class="search-history"></div>
+                    <div class="search-results"></div>
+                </div>
             </div>
             <div class="theme-toggle" id="themeToggle">
                 <span class="theme-toggle-icon">🌓</span>
@@ -900,15 +1018,141 @@
             });
         });
 
-        // Search functionality
-        document.querySelector('.search-box').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+        // Enhanced Search functionality
+        const searchBox = document.querySelector('.search-box');
+        const searchResults = document.querySelector('.search-results');
+        const searchHistory = document.querySelector('.search-history');
+        const searchContainer = document.querySelector('.search-container');
+        
+        // Load search history from localStorage
+        let searchHistoryItems = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        
+        // Function to update search history display
+        function updateSearchHistoryDisplay() {
+            searchHistory.innerHTML = '';
+            
+            if (searchHistoryItems.length === 0) {
+                searchHistory.style.display = 'none';
+                return;
+            }
+            
+            searchHistoryItems.slice(0, 5).forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'search-history-item';
+                historyItem.innerHTML = `
+                    <div class="search-history-text">${item}</div>
+                    <div class="search-history-remove" data-term="${item}">×</div>
+                `;
+                searchHistory.appendChild(historyItem);
+                
+                // Add click event to use history item
+                historyItem.querySelector('.search-history-text').addEventListener('click', () => {
+                    searchBox.value = item;
+                    searchBox.focus();
+                    performSearch(item);
+                    searchHistory.classList.remove('active');
+                });
+                
+                // Add click event to remove history item
+                historyItem.querySelector('.search-history-remove').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const term = e.target.getAttribute('data-term');
+                    searchHistoryItems = searchHistoryItems.filter(i => i !== term);
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryItems));
+                    updateSearchHistoryDisplay();
+                });
+            });
+        }
+        
+        // Show search history when search box is focused
+        searchBox.addEventListener('focus', () => {
+            if (searchHistoryItems.length > 0 && !searchBox.value) {
+                searchHistory.classList.add('active');
+            }
+        });
+        
+        // Hide search history when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchContainer.contains(e.target)) {
+                searchHistory.classList.remove('active');
+                searchResults.classList.remove('active');
+            }
+        });
+        
+        // Function to highlight text
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+        
+        // Function to get context around a match
+        function getContext(text, searchTerm, contextLength = 50) {
+            const lowerText = text.toLowerCase();
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            const index = lowerText.indexOf(lowerSearchTerm);
+            
+            if (index === -1) return '';
+            
+            const start = Math.max(0, index - contextLength);
+            const end = Math.min(text.length, index + searchTerm.length + contextLength);
+            let context = text.substring(start, end);
+            
+            // Add ellipsis if we're not at the beginning/end
+            if (start > 0) context = '...' + context;
+            if (end < text.length) context = context + '...';
+            
+            return context;
+        }
+        
+        // Fuzzy search function
+        function fuzzyMatch(text, searchTerm) {
+            if (!searchTerm) return false;
+            
+            const lowerText = text.toLowerCase();
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            
+            // Exact match
+            if (lowerText.includes(lowerSearchTerm)) return true;
+            
+            // Fuzzy match - all characters in order but not necessarily adjacent
+            let textIndex = 0;
+            for (let i = 0; i < lowerSearchTerm.length; i++) {
+                const char = lowerSearchTerm[i];
+                const charIndex = lowerText.indexOf(char, textIndex);
+                
+                if (charIndex === -1) return false;
+                textIndex = charIndex + 1;
+            }
+            
+            return true;
+        }
+        
+        // Function to perform search
+        function performSearch(searchTerm) {
+            if (!searchTerm) {
+                // Reset navigation display
+                document.querySelectorAll('.nav-list a').forEach(link => {
+                    link.style.display = 'block';
+                });
+                document.querySelectorAll('.sub-list').forEach(list => {
+                    list.style.display = 'none';
+                });
+                searchResults.classList.remove('active');
+                return;
+            }
+            
+            // Filter navigation items
             const links = document.querySelectorAll('.nav-list a');
+            let visibleLinks = 0;
             
             links.forEach(link => {
                 const text = link.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
+                if (text.includes(searchTerm.toLowerCase())) {
                     link.style.display = 'block';
+                    visibleLinks++;
+                    
                     // Show parent lists if a child matches
                     let parent = link.parentElement;
                     while (parent && parent.classList.contains('sub-list')) {
@@ -921,6 +1165,144 @@
                 } else {
                     link.style.display = 'none';
                 }
+            });
+            
+            // Search in content
+            searchResults.innerHTML = '';
+            let resultsFound = false;
+            
+            // Get all loaded iframe content
+            const iframe = document.querySelector('iframe');
+            if (iframe && iframe.contentDocument) {
+                const iframeContent = iframe.contentDocument.body.textContent;
+                
+                // Search in paragraphs, headings, and other elements
+                const contentElements = iframe.contentDocument.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td, th');
+                
+                const searchResultItems = [];
+                contentElements.forEach(element => {
+                    const text = element.textContent;
+                    
+                    if (fuzzyMatch(text, searchTerm)) {
+                        // Get element type and heading for context
+                        let title = '';
+                        if (element.tagName.startsWith('H')) {
+                            title = element.textContent;
+                        } else {
+                            // Find the closest heading
+                            let currentElement = element;
+                            while (currentElement) {
+                                if (currentElement.tagName && currentElement.tagName.startsWith('H')) {
+                                    title = currentElement.textContent;
+                                    break;
+                                }
+                                currentElement = currentElement.previousElementSibling;
+                            }
+                            
+                            // If no heading found, use the first 30 chars of content
+                            if (!title) {
+                                title = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+                            }
+                        }
+                        
+                        // Add to search results if not already there
+                        if (!searchResultItems.some(r => r.title === title)) {
+                            searchResultItems.push({
+                                title: title,
+                                context: getContext(text, searchTerm),
+                                element: element
+                            });
+                        }
+                    }
+                });
+                
+                // Display search results
+                if (searchResultItems.length > 0) {
+                    resultsFound = true;
+                    searchResultItems.slice(0, 10).forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'search-result-item';
+                        resultItem.innerHTML = `
+                            <div class="search-result-title">${highlightText(result.title, searchTerm)}</div>
+                            <div class="search-result-context">${highlightText(result.context, searchTerm)}</div>
+                        `;
+                        
+                        // Add click event to scroll to the element
+                        resultItem.addEventListener('click', () => {
+                            result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            // Highlight the element temporarily
+                            const originalBackground = result.element.style.backgroundColor;
+                            result.element.style.backgroundColor = 'rgba(52, 152, 219, 0.2)';
+                            result.element.style.transition = 'background-color 0.5s';
+                            
+                            setTimeout(() => {
+                                result.element.style.backgroundColor = originalBackground;
+                            }, 2000);
+                            
+                            searchResults.classList.remove('active');
+                        });
+                        
+                        searchResults.appendChild(resultItem);
+                    });
+                }
+            }
+            
+            // Show no results message if needed
+            if (!resultsFound && searchTerm) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.textContent = 'No results found';
+                searchResults.appendChild(noResults);
+            }
+            
+            // Show/hide search results panel
+            if (searchTerm && (resultsFound || searchTerm.length > 2)) {
+                searchResults.classList.add('active');
+                
+                // Add to search history if not already there
+                if (searchTerm.length > 2 && !searchHistoryItems.includes(searchTerm)) {
+                    searchHistoryItems.unshift(searchTerm);
+                    searchHistoryItems = searchHistoryItems.slice(0, 10); // Keep only 10 items
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryItems));
+                    updateSearchHistoryDisplay();
+                }
+            } else {
+                searchResults.classList.remove('active');
+            }
+        }
+        
+        // Debounce function to limit how often search is performed
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+        
+        // Initialize search history
+        updateSearchHistoryDisplay();
+        
+        // Add event listeners
+        const debouncedSearch = debounce(performSearch, 300);
+        
+        searchBox.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            debouncedSearch(searchTerm);
+            
+            if (searchTerm) {
+                searchHistory.classList.remove('active');
+            } else if (searchHistoryItems.length > 0) {
+                searchHistory.classList.add('active');
+            }
+        });
+        
+        // Clear search when clicking on a navigation item
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                searchBox.value = '';
+                performSearch('');
             });
         });
 
